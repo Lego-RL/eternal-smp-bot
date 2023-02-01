@@ -58,8 +58,6 @@ class Info(commands.Cog):
         players: list = get_players_online()
         num_players: int = len(players)
 
-        print("updating voice chat!")
-
         if self.num_online_vc:
             if num_players == 1:
                 await self.num_online_vc.edit(name=f"{num_players} player online!")
