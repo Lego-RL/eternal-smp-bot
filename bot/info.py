@@ -13,10 +13,22 @@ def get_players_online() -> list:
     """
 
     API_LINK: str = "https://api.mcsrvstat.us/2/150.136.42.152"
+    players: list = []
 
     response: dict = requests.get(API_LINK).json()
 
-    players: list = response["players"]["list"]
+    # players: list = response["players"]["list"]
+
+    if "list" in response["players"].keys():
+        players = response["players"]["list"]
+
+    elif "info" in response["players"].keys():
+        players = response["players"]["info"]["clean"]
+
+    if not players:
+        # no playes online
+        return []
+
 
     players = [player.strip("(vault)") for player in players]
 
