@@ -10,7 +10,7 @@ TOKEN = os.getenv("BOT_TOKEN")
 bot = discord.Bot()
 
 
-extensions = ['admin', 'armory']
+extensions = ['admin', 'armory', 'info']
 
 for ext in extensions:
     bot.load_extension(ext)
