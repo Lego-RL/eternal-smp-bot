@@ -48,7 +48,7 @@ class Info(commands.Cog):
         self.update_num_online.start()
 
         
-    @tasks.loop(seconds=30)
+    @tasks.loop(seconds=10)
     async def update_num_online(self):
         """
         Automatically update a voice channel's name every
@@ -57,6 +57,8 @@ class Info(commands.Cog):
 
         players: list = get_players_online()
         num_players: int = len(players)
+
+        print("updating voice chat!")
 
         if self.num_online_vc:
             if num_players == 1:
