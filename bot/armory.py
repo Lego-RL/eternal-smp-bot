@@ -7,11 +7,11 @@ from discord.ext import commands
 import json
 import os
 
-def get_player_snapshots() -> list[dict]:
+def get_player_snapshots() -> list:
 
-    snapshots: list[dict] = []
+    snapshots: list = []
 
-    files: list[str] = os.listdir("playerSnapshots")
+    files: list = os.listdir("playerSnapshots")
     
     for file in files:
         with open(f"playerSnapshots/{file}", "r") as f:
@@ -24,8 +24,8 @@ def get_player_stats(ign: str) -> dict:
     Return dictionary of player stats, given a player name.
     """
 
-    snapshots: list[dict] = get_player_snapshots()
-    to_preserve: list[str] = ["vaultLevel", "powerLevel", "abilities", "talents", "researches"]
+    snapshots: list = get_player_snapshots()
+    to_preserve: list = ["vaultLevel", "powerLevel", "abilities", "talents", "researches"]
 
     for snapshot in snapshots:
         if snapshot["playerNickname"] == ign:
