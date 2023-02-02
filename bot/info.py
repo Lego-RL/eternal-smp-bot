@@ -17,8 +17,15 @@ def get_players_online() -> list:
 
     response: dict = requests.get(API_LINK).json()
 
-    if "clean" in response["info"].keys():
-        players = response["info"]["clean"]
+    # sometimes player list is in "info", sometimes in "players"
+
+    if (resp_info := response.get("info")):
+        if "clean" in resp_info.keys():
+            players = response["info"]["clean"]
+
+    elif (resp_info := response.get("players")):
+        if "list" in resp_info.keys():
+            players = resp_info["list"]
 
     if not players:
         # no players online
