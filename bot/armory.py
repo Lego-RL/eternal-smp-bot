@@ -67,6 +67,15 @@ class Armory(commands.Cog):
         for research in stats["researches"]:
             researches_str += f"{research}\n"
 
+        if not abilities_str:
+            abilities_str = "This player has not taken any abilities!"
+
+        if not talents_str:
+            talents_str = "This player has not taken any talents!"
+
+        if not researches_str:
+            researches_str = "This player has researched no mods yet!"
+
 
         description: str = f"Vault level: **{vaultLevel}**\nPower level: **{powerLevel}**"
         embed: discord.Embed = discord.Embed(title=f"{ign}'s Stats", description=description)
