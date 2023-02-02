@@ -79,6 +79,7 @@ class Armory(commands.Cog):
 
         description: str = f"Vault level: **{vaultLevel}**\nPower level: **{powerLevel}**"
         embed: discord.Embed = discord.Embed(title=f"{ign}'s Stats", description=description)
+        embed.color = 0x7c1bd1
 
         embed.add_field(name="Abilities", value=abilities_str, inline=True)
         embed.add_field(name='Talents', value=talents_str, inline=True)
