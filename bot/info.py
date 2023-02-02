@@ -17,20 +17,15 @@ def get_players_online() -> list:
 
     response: dict = requests.get(API_LINK).json()
 
-    # players: list = response["players"]["list"]
-
-    if "list" in response["players"].keys():
-        players = response["players"]["list"]
-
-    elif "info" in response["players"].keys():
-        players = response["players"]["info"]["clean"]
+    if "clean" in response["info"].keys():
+        players = response["info"]["clean"]
 
     if not players:
-        # no playes online
+        # no players online
         return []
+    
 
-
-    players = [player.strip("(vault)") for player in players]
+    players = [player.rstrip("(vault)") for player in players]
 
     return players
 
