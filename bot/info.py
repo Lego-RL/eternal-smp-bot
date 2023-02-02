@@ -4,6 +4,7 @@ from discord import ApplicationContext
 from discord.commands import slash_command
 from discord.ext import commands, tasks
 
+import json
 import requests
 
 def get_players_online() -> list:
@@ -93,6 +94,22 @@ class Info(commands.Cog):
         else:
             response_str: str = "**Players currently online**:" + "\n"
             await ctx.respond(response_str + "\n".join(players))
+
+    @slash_command(name="alias")
+    async def set_alias(self, ctx: ApplicationContext, ign: str):
+        """
+        Allow a user to set their MC username.
+        """
+
+        with open("bot/alias.json", "r") as f:
+            data: dict = json.load(f)
+
+        data[str(ctx.user.id)] = ign
+
+        with open("bot/alias.json", "w") as f:
+            json.dump(data, f, indent=4)
+
+        await ctx.respond(f"Successfully tied your discord account to Minecraft user `{ign}`!")
 
 
 def setup(bot: discord.Bot) -> None:

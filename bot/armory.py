@@ -1,7 +1,7 @@
 import discord
 from discord import ApplicationContext
 
-from discord.commands import slash_command
+from discord.commands import slash_command, Option
 from discord.ext import commands
 
 import json
@@ -34,6 +34,15 @@ def get_player_stats(ign: str) -> dict:
 
     return {}
 
+def get_alias_dict() -> dict:
+    """
+    Retrieve list of aliases, of mc username to discord user ids.
+    """
+
+    with open("bot/alias.json", "r") as f:
+        data: dict = json.load(f)
+
+    return data
     
 
 class Armory(commands.Cog):
@@ -42,15 +51,53 @@ class Armory(commands.Cog):
 
 
     @slash_command(name="stats")
-    async def stats(self, ctx: ApplicationContext, ign: str):
+    # @option(
+    #     "user",
+    #     type=discord.User,
+    #     description="Choose a user to look up stats for",
+    #     required=False
+    # )
+    # @option(
+    #     "ign",
+    #     type=str,
+    #     description="Alternatively, supply a Minecraft username to get stats on",
+    #     required=False
+    # )
+    async def stats(self, 
+                    ctx: ApplicationContext, 
+                    user: Option(discord.User, "Choose a user to look up stats for", required=False), 
+                    mc_username: Option(str, "Alternatively, supply a Minecraft username to get stats on", required=False)):
         """
         Respond with an embed of player stats on the requested player.
         """
 
+        # given mc username
+        if mc_username:
+            ign: str = mc_username
+
+        # find username based on -supplied user or -command invoker
+        else:
+            aliases: dict = get_alias_dict()
+            if user:
+                if str(user.id) in aliases:
+                    ign: str = aliases[str(user.id)]
+
+                else:
+                    await ctx.respond("Could not find user's alias! Have they set their alias with `/alias`?")
+                    return
+                
+            else:
+                if str(ctx.user.id) in aliases:
+                    ign: str = aliases[str(ctx.user.id)]
+
+                else:
+                    await ctx.respond("Could not find your alias! Have you set your alias with `/alias`?")
+                    return
+
         stats: dict = get_player_stats(ign)
 
         if not stats:
-            await ctx.respond("Could not find a player with given username!",)
+            await ctx.respond("Could not find a player with given Minecraft username!",)
             return
         
         vaultLevel, powerLevel = stats["vaultLevel"], stats["powerLevel"]
