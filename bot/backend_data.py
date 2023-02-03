@@ -271,11 +271,13 @@ def get_player_bounty_data(ign: str):
         for bounty in bountiesFile['data'][bounty_availability][playerUUID].value: #type: ignore
 
             # Get Bounty
-            bounty = bounty['task']
+            bounty_details = bounty['task']
 
+            if bounty_availability == "active":
+                bounty_progress: int = bounty_details["amountObtained"].value
 
             ## Bounty Task
-            bounty_task: str = bounty['properties']
+            bounty_task: str = bounty_details['properties']
 
             bounty_task_type: str = bounty_task['taskType'].value #type: ignore
             bounty_task_amount: int = round(bounty_task['amount'].value) #type: ignore
@@ -293,7 +295,7 @@ def get_player_bounty_data(ign: str):
 
 
             ## Bounty Rewards
-            bounty_reward: str = bounty['reward']
+            bounty_reward: str = bounty_details['reward']
 
             bounty_rewards: list = []
 
@@ -302,22 +304,30 @@ def get_player_bounty_data(ign: str):
                     "id": format_bounty_reward_id(item['id'].value),
                     "count": item['Count'].value
                 })
+
+            bounty_reward_experience = bounty_reward['vaultExp'].value #type: ignore
             
-            
-            bounties.append(
-                {
+            bounty_dict: dict = {
                     "availability": bounty_availability,
                     "task": {
                         "type": bounty_task_type,
                         "amount": bounty_task_amount,
                         "id": bounty_task_id
                     },
-                    "rewards": bounty_rewards
+                    "reward": {
+                        "vaultExperience": bounty_reward_experience,
+                        "items": bounty_rewards
+                    }
                 }
-            )
+            
+            if bounty_availability == "active":
+                bounty_dict["task"]["progress"] = bounty_progress #type: ignore
 
+            if bounty_availability == "complete":
+                bounty_dict["expiration"] = bounty["expiration"].value
 
-
+            bounties.append(bounty_dict)
+            
     return bounties
 
 
