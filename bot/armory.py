@@ -6,6 +6,7 @@ from discord.ext import commands
 
 import json
 import os
+from sys import platform
 
 def get_player_snapshots() -> list:
 
@@ -39,7 +40,11 @@ def get_alias_dict() -> dict:
     Retrieve list of aliases, of mc username to discord user ids.
     """
 
-    path: str = os.path.join("bot", "alias.json")
+    if platform != "win32":
+        path: str = os.path.join("eternal-smp-bot", "bot", "alias.json")
+
+    else:
+        path: str = os.path.join("bot", "alias.json")
 
     if not os.path.isfile(path):
         # generate file if it doesn't already exist
@@ -57,6 +62,23 @@ def get_alias_dict() -> dict:
 
     return data
     
+
+def write_to_alias_file(data: dict) -> None:
+    """
+    Standardized method to write a dict to
+    the alias file.
+    """
+
+    if platform != "win32":
+        path: str = os.path.join("eternal-smp-bot", "bot", "alias.json")
+
+    else:
+        path: str = os.path.join("bot", "alias.json")
+
+    with open(path, "w") as f:
+        json.dump(data, f, indent=4)
+
+
 
 class Armory(commands.Cog):
     def __init__(self, bot: discord.Bot) -> None:

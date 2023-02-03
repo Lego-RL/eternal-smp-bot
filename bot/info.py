@@ -7,7 +7,7 @@ from discord.ext import commands, tasks
 import json
 import requests
 
-from armory import get_alias_dict
+from armory import get_alias_dict, write_to_alias_file
 
 def get_players_online() -> list:
     """
@@ -106,8 +106,7 @@ class Info(commands.Cog):
 
         data[str(ctx.user.id)] = ign
 
-        with open("bot/alias.json", "w") as f:
-            json.dump(data, f, indent=4)
+        write_to_alias_file(data)
 
         await ctx.respond(f"Successfully tied your discord account to Minecraft user `{ign}`!")
 
