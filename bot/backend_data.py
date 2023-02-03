@@ -300,10 +300,24 @@ def get_player_bounty_data(ign: str):
             bounty_rewards: list = []
 
             for item in bounty_reward['items'].value: #type: ignore
-                bounty_rewards.append({
-                    "id": format_bounty_reward_id(item['id'].value),
-                    "count": item['Count'].value
-                })
+
+                # exists will be True if bounty reward already exists in bounty_rewards list,
+                # so as to not duplicate the entry
+                exists: bool = False
+
+                #check if reward is duplicated, and add to original entry count if so
+                item_id: str = format_bounty_reward_id(item['id'].value)
+                for index in range(len(bounty_rewards)):
+                    if bounty_rewards[index]["id"] == item_id:
+                        exists = True
+                        bounty_rewards[index]["count"] += item['Count'].value
+
+                # skip entries that already exist in bounty_rewards list
+                if not exists:
+                    bounty_rewards.append({
+                        "id": format_bounty_reward_id(item['id'].value),
+                        "count": item['Count'].value
+                    })
 
             bounty_reward_experience = bounty_reward['vaultExp'].value #type: ignore
             
