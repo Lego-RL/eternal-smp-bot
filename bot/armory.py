@@ -239,13 +239,13 @@ class Armory(commands.Cog):
                 field_str += f"**{bounty['task']['type']}**\n"
 
                 # task id : amount
-                bounty_progress: int = bounty["task"]["progress"] if bounty["availability"] == "active" else 0
+                bounty_progress: int = int(bounty["task"]["progress"]) if bounty["availability"] == "active" else 0
                 field_str += f"{bounty['task']['id']}: {bounty_progress} / {bounty['task']['amount']}\n\n"
                 
                 # rewards
                 rewards_str: str = ""
                 for reward in bounty['reward']["items"]:
-                    rewards_str += f"{reward['id']}: {reward['count']},"
+                    rewards_str += f"{reward['id']}: {reward['count']}, "
 
                 rewards_str = rewards_str[:-1]
 
@@ -257,8 +257,11 @@ class Armory(commands.Cog):
                     expiry_timestamp: int = bounty["expiration"]
                     field_str += f"\n\nExpires at <t:{expiry_timestamp}:f>\n\n"
 
+                else:
+                    field_str = "\n\n"
 
-            embed.add_field(name=f"{availability}".title(), value=field_str)
+
+            embed.add_field(name=f"{availability}".title(), value=field_str, inline=False)
 
 
         
