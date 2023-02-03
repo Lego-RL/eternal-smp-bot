@@ -39,12 +39,14 @@ def get_alias_dict() -> dict:
     Retrieve list of aliases, of mc username to discord user ids.
     """
 
-    if not os.path.isfile("bot/alias.json"):
+    path: str = os.path.join("bot", "alias.json")
+
+    if not os.path.isfile(path):
         # generate file if it doesn't already exist
-        with open("bot/alias.json", "w") as f:
+        with open(path, "w") as f:
             pass
 
-    with open("bot/alias.json", "a+") as f:
+    with open(path, "a+") as f:
         f.seek(0)
 
         try:
