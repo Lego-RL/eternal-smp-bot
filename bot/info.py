@@ -7,6 +7,8 @@ from discord.ext import commands, tasks
 import json
 import requests
 
+from armory import get_alias_dict
+
 def get_players_online() -> list:
     """
     Return a list of names of players currently
@@ -100,9 +102,7 @@ class Info(commands.Cog):
         """
         Allow a user to set their MC username.
         """
-
-        with open("bot/alias.json", "r") as f:
-            data: dict = json.load(f)
+        data: dict = get_alias_dict()
 
         data[str(ctx.user.id)] = ign
 

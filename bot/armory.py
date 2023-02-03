@@ -39,8 +39,14 @@ def get_alias_dict() -> dict:
     Retrieve list of aliases, of mc username to discord user ids.
     """
 
-    with open("bot/alias.json", "r") as f:
-        data: dict = json.load(f)
+    with open("bot/alias.json", "a+") as f:
+        f.seek(0)
+
+        try:
+            data: dict = json.load(f)
+
+        except json.JSONDecodeError:
+            return {}
 
     return data
     
@@ -51,22 +57,10 @@ class Armory(commands.Cog):
 
 
     @slash_command(name="stats")
-    # @option(
-    #     "user",
-    #     type=discord.User,
-    #     description="Choose a user to look up stats for",
-    #     required=False
-    # )
-    # @option(
-    #     "ign",
-    #     type=str,
-    #     description="Alternatively, supply a Minecraft username to get stats on",
-    #     required=False
-    # )
     async def stats(self, 
                     ctx: ApplicationContext, 
-                    user: Option(discord.User, "Choose a user to look up stats for", required=False), 
-                    mc_username: Option(str, "Alternatively, supply a Minecraft username to get stats on", required=False)):
+                    user: Option(discord.User, "Choose a user to look up stats for", required=False), #type: ignore
+                    mc_username: Option(str, "Alternatively, supply a Minecraft username to get stats on", required=False)): #type: ignore
         """
         Respond with an embed of player stats on the requested player.
         """
