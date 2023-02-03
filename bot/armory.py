@@ -229,12 +229,13 @@ class Armory(commands.Cog):
         for bounty in player_bounty_data:
             availability_set.add(bounty["availability"])
 
+        index: int = 0
         for availability in availability_set:
             relevant_bounties: list = [bounty for bounty in player_bounty_data if bounty["availability"] == availability]
 
             field_str: str = ""
 
-            for index, bounty in enumerate(relevant_bounties):
+            for bounty in relevant_bounties:
                 # task type
                 field_str += f"**{bounty['task']['type']}**\n"
 
@@ -260,6 +261,8 @@ class Armory(commands.Cog):
 
                 if index < 2:
                     field_str += "\n‎\n"
+
+                index += 1
 
             embed.add_field(name=f"{availability}".title(), value=field_str, inline=False)
 
