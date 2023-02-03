@@ -8,7 +8,7 @@ import json
 import os
 from sys import platform
 
-from backend_data import get_player_snapshots, get_player_bm_data
+from backend_data import get_player_snapshots, get_player_bm_data, get_player_bounty_data
 
 
 def get_player_stats(ign: str) -> dict:
@@ -168,8 +168,8 @@ class Armory(commands.Cog):
     @slash_command(name="bm")
     async def black_market(self, 
                            ctx: ApplicationContext, 
-                           user: Option(discord.User, "Choose a user to look up stats for", required=False), #type: ignore
-                           mc_username: Option(str, "Alternatively, supply a Minecraft username to get stats on", required=False)): #type: ignore
+                           user: Option(discord.User, "Choose a user view active black market offerings for", required=False), #type: ignore
+                           mc_username: Option(str, "Alternatively, supply a Minecraft username to get black market offerings", required=False)): #type: ignore
         """
         Display the available black market trades of given player.
         """
@@ -198,6 +198,30 @@ class Armory(commands.Cog):
             embed.add_field(name=f"x{amount} {item}", value=f"Costs {cost} soul shards", inline=False)
 
         await ctx.respond(embed=embed)
+
+
+    @slash_command(name="bounty")
+    async def bounties(self,
+                       ctx: ApplicationContext,
+                       user: Option(discord.User, "Choose a user to look up bounty stats for", required=False), #type: ignore
+                       mc_username: Option(str, "Alternatively, supply a Minecraft username to get bounty stats on", required=False)): #type: ignore
+
+        """
+        Display available, active, and completed bounties of a given user.
+        """
+
+        result_bool, result_str = choose_correct_ign(ctx, user, mc_username)
+
+        # if couldn't find ign
+        if not result_bool:
+            await ctx.respond(result_str)
+            return
+
+        ign: str = result_str
+
+        player_bounty_data = get_player_bounty_data(ign)
+
+        await ctx.respond(player_bounty_data)
 
     # PLAYER AGNOSTIC SLASH COMMANDS
 

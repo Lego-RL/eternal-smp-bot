@@ -1,0 +1,60 @@
+{
+    "tasks": {
+        "the_vault:completion": {
+            "name": "Completion",
+            "taskId": "id",
+            "idPrefix": "",
+            "ids": {
+                "vault": "Any Vault",
+                "boss": "Hunt the Guardians Vault",
+                "cake": "Cake Vault",
+                "scavenger": "Scavenger Vault"
+            }
+        },
+        "the_vault:item_discovery": {
+            "name": "Item Discovery",
+            "taskId": "itemId",
+            "idPrefix": "item.",
+            "ids": {
+                "item.minecraft.shulker_shell": "Shulker Shell"
+            }
+        },
+        "the_vault:item_submission": {
+            "name": "Item Submission",
+            "taskId": "itemId",
+            "idPrefix": "item.",
+            "ids": {
+                "item.minecraft.diamond": "Diamond",
+                "item.minecraft.netherite_ingot": "Netherite Ingot",
+                "item.quark.soul_bead": "Soul Bead"
+            }
+        },
+        "the_vault:kill_entity": {
+            "name": "Kill Entity",
+            "taskId": "entityId",
+            "idPrefix": "entity.",
+            "ids": {
+                "entity.minecraft.drowned": "Drowned",
+                "entity.minecraft.husk": "Husk",
+                "entity.minecraft.skeleton": "Skeleton",
+                "entity.minecraft.stray": "Stray",
+                "entity.quark.wraith": "Wraith",
+                "entity.minecraft.zombie": "Zombie",
+                "entity.minecraft.piglin": "Piglin"
+            }
+        },
+        "the_vault:mining": {
+            "name": "Mining",
+            "taskId": "blockId",
+            "idPrefix": "block.",
+            "ids": {
+
+            }
+        }
+    },
+    "rewards": {
+        "item.minecraft.diamond": "Diamond",
+        "item.minecraft.elytra": "Elytra",
+        "item.minecraft.netherite_ingot": "Netherite Ingot"
+    }
+}
