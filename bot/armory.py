@@ -8,17 +8,8 @@ import json
 import os
 from sys import platform
 
-def get_player_snapshots() -> list:
+from backend_data import get_player_snapshots, get_player_bm_data
 
-    snapshots: list = []
-
-    files: list = os.listdir("playerSnapshots")
-    
-    for file in files:
-        with open(f"playerSnapshots/{file}", "r") as f:
-            snapshots.append(json.load(f))
-
-    return snapshots
 
 def get_player_stats(ign: str) -> dict:
     """
@@ -61,7 +52,7 @@ def get_alias_dict() -> dict:
             return {}
 
     return data
-    
+
 
 def write_to_alias_file(data: dict) -> None:
     """
@@ -79,11 +70,41 @@ def write_to_alias_file(data: dict) -> None:
         json.dump(data, f, indent=4)
 
 
+def choose_correct_ign(ctx: ApplicationContext, user=None, mc_username=None) -> tuple:
+    """
+    Return tuple of bool, str.
+
+    Bool represents whether proper username was found or not, if
+    found then str will represent players IGN.
+
+    If not found, str will be proper error message to display to user.
+    """
+
+    if mc_username:
+        return (True, mc_username)
+    
+    aliases: dict = get_alias_dict()
+
+    if user:
+        if str(user.id) in aliases:
+            return (True, aliases[str(user.id)])
+
+        else:
+            return (False, "Could not find user's alias! Have they set their alias with `/alias`?")
+        
+    else:
+        if str(ctx.user.id) in aliases:
+            return (True, aliases[str(ctx.user.id)])
+
+        else:
+            return (False, "Could not find your alias! Have you set your alias with `/alias`?")
+
 
 class Armory(commands.Cog):
     def __init__(self, bot: discord.Bot) -> None:
         self.bot: discord.Bot = bot
 
+    # PLAYER SPECIFIC SLASH COMMNADS
 
     @slash_command(name="stats")
     async def stats(self, 
@@ -94,28 +115,14 @@ class Armory(commands.Cog):
         Respond with an embed of player stats on the requested player.
         """
 
-        # given mc username
-        if mc_username:
-            ign: str = mc_username
+        result_bool, result_str = choose_correct_ign(ctx, user, mc_username)
 
-        # find username based on -supplied user or -command invoker
-        else:
-            aliases: dict = get_alias_dict()
-            if user:
-                if str(user.id) in aliases:
-                    ign: str = aliases[str(user.id)]
+        # if couldn't find ign
+        if not result_bool:
+            await ctx.respond(result_str)
+            return
 
-                else:
-                    await ctx.respond("Could not find user's alias! Have they set their alias with `/alias`?")
-                    return
-                
-            else:
-                if str(ctx.user.id) in aliases:
-                    ign: str = aliases[str(ctx.user.id)]
-
-                else:
-                    await ctx.respond("Could not find your alias! Have you set your alias with `/alias`?")
-                    return
+        ign: str = result_str
 
         stats: dict = get_player_stats(ign)
 
@@ -158,7 +165,41 @@ class Armory(commands.Cog):
         await ctx.respond(embed=embed)
             
 
+    @slash_command(name="bm")
+    async def black_market(self, 
+                           ctx: ApplicationContext, 
+                           user: Option(discord.User, "Choose a user to look up stats for", required=False), #type: ignore
+                           mc_username: Option(str, "Alternatively, supply a Minecraft username to get stats on", required=False)): #type: ignore
+        """
+        Display the available black market trades of given player.
+        """
 
+        result_bool, result_str = choose_correct_ign(ctx, user, mc_username)
+
+        # if couldn't find ign
+        if not result_bool:
+            await ctx.respond(result_str)
+            return
+
+        ign: str = result_str
+
+        player_bm_data: dict = get_player_bm_data(ign)
+
+        embed: discord.Embed = discord.Embed(title=f"{ign}'s Black Market")
+        embed.color = 0x7c1bd1
+
+        sorted_trades = sorted(player_bm_data["trades"], key=lambda x:x[list(x.keys())[0]]["cost"], reverse=True)
+
+        for trade in sorted_trades:
+            item: str = list(trade.keys())[0]
+            amount: int = trade[item]["amount"]
+            cost: int = trade[item]["cost"]
+
+            embed.add_field(name=f"x{amount} {item}", value=f"Costs {cost} soul shards", inline=False)
+
+        await ctx.respond(embed=embed)
+
+    # PLAYER AGNOSTIC SLASH COMMANDS
 
     @slash_command(name="in-vault")
     async def invault(self, ctx: ApplicationContext):

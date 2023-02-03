@@ -2,3 +2,6 @@
 /env
 */__pycache__
 /playerSnapshots
+*.ipynb
+local/
+bot/alias.json
