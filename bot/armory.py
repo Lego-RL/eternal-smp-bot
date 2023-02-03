@@ -258,7 +258,7 @@ class Armory(commands.Cog):
                     field_str += f"\n\nExpires at <t:{expiry_timestamp}:f>\n\n"
 
                 else:
-                    field_str = "\n\n"
+                    field_str += "\n\n"
 
 
             embed.add_field(name=f"{availability}".title(), value=field_str, inline=False)
