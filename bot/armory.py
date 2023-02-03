@@ -234,7 +234,7 @@ class Armory(commands.Cog):
 
             field_str: str = ""
 
-            for bounty in relevant_bounties:
+            for index, bounty in enumerate(relevant_bounties):
                 # task type
                 field_str += f"**{bounty['task']['type']}**\n"
 
@@ -247,7 +247,7 @@ class Armory(commands.Cog):
                 for reward in bounty['reward']["items"]:
                     rewards_str += f"{reward['id']}: {reward['count']}, "
 
-                rewards_str = rewards_str[:-1]
+                rewards_str = rewards_str[:-2]
 
                 rewards_str += f"\nExperience: {bounty['reward']['vaultExperience']}"
 
@@ -255,11 +255,11 @@ class Armory(commands.Cog):
 
                 if bounty["availability"] == "complete":
                     expiry_timestamp: int = bounty["expiration"]
-                    field_str += f"\n\nExpires at <t:{expiry_timestamp}:f>\n\n"
 
-                else:
-                    field_str += "\n\n"
+                    field_str += f"\n\nExpires at <t:{expiry_timestamp}:f>"
 
+                if index < 2:
+                    field_str += "\n‎\n"
 
             embed.add_field(name=f"{availability}".title(), value=field_str, inline=False)
 
