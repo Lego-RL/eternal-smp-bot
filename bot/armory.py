@@ -226,12 +226,12 @@ class Armory(commands.Cog):
 
         availability_set: set = set()
 
+        for bounty in player_bounty_data:
+            availability_set.add(bounty["availability"])
+
         # show categories in same order every time
         availability_order: list = ["active", "available", "complete"]
         availability_order = [x for x in availability_order if x in availability_set]
-
-        for bounty in player_bounty_data:
-            availability_set.add(bounty["availability"])
 
         index: int = 0
         for availability in availability_order:
