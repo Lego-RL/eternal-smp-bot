@@ -219,9 +219,51 @@ class Armory(commands.Cog):
 
         ign: str = result_str
 
-        player_bounty_data = get_player_bounty_data(ign)
+        player_bounty_data: list = get_player_bounty_data(ign) #type: ignore
 
-        await ctx.respond(player_bounty_data)
+        embed: discord.Embed = discord.Embed(title=f"{ign}'s Bounties")
+        embed.color = 0x7c1bd1
+
+        availability_set: set = set()
+
+        for bounty in player_bounty_data:
+            availability_set.add(bounty["availability"])
+
+        for availability in availability_set:
+            relevant_bounties: list = [bounty for bounty in player_bounty_data if bounty["availability"] == availability]
+
+            field_str: str = ""
+
+            for bounty in relevant_bounties:
+                # task type
+                field_str += f"**{bounty['task']['type']}**\n"
+
+                # task id : amount
+                bounty_progress: int = bounty["task"]["progress"] if bounty["availability"] == "active" else 0
+                field_str += f"{bounty['task']['id']}: {bounty_progress} / {bounty['task']['amount']}\n\n"
+                
+                # rewards
+                rewards_str: str = ""
+                for reward in bounty['reward']["items"]:
+                    rewards_str += f"{reward['id']}: {reward['count']},"
+
+                rewards_str = rewards_str[:-1]
+
+                rewards_str += f"\nExperience: {bounty['reward']['vaultExperience']}"
+
+                field_str += f"Rewards: {rewards_str}"
+
+                if bounty["availability"] == "complete":
+                    expiry_timestamp: int = bounty["expiration"]
+                    field_str += f"\n\nExpires at <t:{expiry_timestamp}:f>\n\n"
+
+
+            embed.add_field(name=f"{availability}".title(), value=field_str)
+
+
+        
+
+        await ctx.respond(embed=embed)
 
     # PLAYER AGNOSTIC SLASH COMMANDS
 
