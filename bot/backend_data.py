@@ -68,6 +68,26 @@ def get_bm_nbt_file():
 
     return nbt.read_from_nbt_file(path)
 
+
+def format_bm_item_id(item_id: str) -> str:
+    """
+    Given a minecraft item id, return its
+    user-facing display name.
+    """
+
+    if item_id == "minecraft:elytra":
+        return "Elytra"
+    
+    with open(VAULT_LANG_PATH, "r") as f:
+
+        the_vault_data: dict = json.load(f)
+
+        if item_id in the_vault_data.keys():
+            item_id = the_vault_data.get(item_id) #type: ignore
+    
+    return item_id
+
+
 def get_bm_player_order() -> list:
     """
     Return a list of player names, in order, to
@@ -106,7 +126,7 @@ def get_all_bm_data() -> dict:
 
         for trade in bm_entry["trades"]:
 
-            item: str = trade["trade"]["stack"]["id"].value
+            item: str = format_bm_item_id(trade["trade"]["stack"]["id"].value)
             amount: int = trade["trade"]["stack"]["Count"].value
             cost: int = trade["trade"]["cost"].value
 
