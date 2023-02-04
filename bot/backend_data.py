@@ -344,6 +344,9 @@ def get_player_bounty_data(ign: str):
                         "count": item['Count'].value
                     })
 
+            # sort bounty rewards by quantity
+            bounty_rewards = sorted(bounty_rewards, key=lambda x: x["count"], reverse=True)
+
             bounty_reward_experience = bounty_reward['vaultExp'].value #type: ignore
             
             bounty_dict: dict = {
