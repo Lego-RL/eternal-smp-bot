@@ -69,7 +69,7 @@ def get_bm_nbt_file():
     return nbt.read_from_nbt_file(path)
 
 
-def format_bm_item_id(item_id: str) -> str:
+def format_bm_item_id(item_id: str):
     """
     Given a minecraft item id, return its
     user-facing display name.
@@ -78,13 +78,18 @@ def format_bm_item_id(item_id: str) -> str:
     if item_id == "minecraft:elytra":
         return "Elytra"
     
+    # modify item_id to normalize with all id names
+    normalized_item_id: str = "item." + (item_id).replace(":", ".")
+    
     with open(VAULT_LANG_PATH, "r") as f:
 
         the_vault_data: dict = json.load(f)
 
-        if item_id in the_vault_data.keys():
-            item_id = the_vault_data.get(item_id) #type: ignore
+        if normalized_item_id in the_vault_data.keys():
+            item_display_name = the_vault_data.get(normalized_item_id) #type: ignore
+            return item_display_name
     
+    # fall back incase item not found in lang file
     return item_id
 
 
@@ -126,7 +131,7 @@ def get_all_bm_data() -> dict:
 
         for trade in bm_entry["trades"]:
 
-            item: str = format_bm_item_id(trade["trade"]["stack"]["id"].value)
+            item: str = format_bm_item_id(trade["trade"]["stack"]["id"].value) #type: ignore
             amount: int = trade["trade"]["stack"]["Count"].value
             cost: int = trade["trade"]["cost"].value
 
@@ -367,5 +372,4 @@ def get_player_bounty_data(ign: str):
 
 
 if __name__ == "__main__":
-    player_bounty_data = get_player_bounty_data("ubow")
-    print(player_bounty_data)
+    print(format_bm_item_id("the_vault:plain_burger"))
