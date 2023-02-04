@@ -259,7 +259,8 @@ class Armory(commands.Cog):
                 field_str += f"Rewards: {rewards_str}"
 
                 if bounty["availability"] == "complete":
-                    expiry_timestamp: int = bounty["expiration"]
+                    # conversion to cut off last few numbers
+                    expiry_timestamp: int = int(str(bounty["expiration"])[:10])
 
                     field_str += f"\n\nExpires at <t:{expiry_timestamp}:f>"
 
