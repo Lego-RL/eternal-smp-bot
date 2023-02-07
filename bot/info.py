@@ -61,6 +61,9 @@ class Info(commands.Cog):
 
         self.update_num_online.start()
 
+    def cog_unload(self):
+        self.update_num_online.cancel()
+
     @tasks.loop(seconds=10)
     async def update_num_online(self):
         """
