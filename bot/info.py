@@ -22,20 +22,19 @@ def get_players_online() -> list:
 
     # sometimes player list is in "info", sometimes in "players"
 
-    if (resp_info := response.get("info")):
+    if resp_info := response.get("info"):
         if "clean" in resp_info.keys():
             players = response["info"]["clean"]
 
-    elif (resp_info := response.get("players")):
+    elif resp_info := response.get("players"):
         if "list" in resp_info.keys():
             players = resp_info["list"]
 
     if not players:
         # no players online
         return []
-    
 
-    players = [player.rstrip("(vault)") for player in players]
+    players = [player[:7] if "(vault)" in player else player for player in players]
 
     return players
 
@@ -49,8 +48,6 @@ class Info(commands.Cog):
 
         self.eternal_guild = None
         self.num_online_vc = None
-        
-
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -64,7 +61,6 @@ class Info(commands.Cog):
 
         self.update_num_online.start()
 
-        
     @tasks.loop(seconds=10)
     async def update_num_online(self):
         """
@@ -108,7 +104,9 @@ class Info(commands.Cog):
 
         write_to_alias_file(data)
 
-        await ctx.respond(f"Successfully tied your discord account to Minecraft user `{ign}`!")
+        await ctx.respond(
+            f"Successfully tied your discord account to Minecraft user `{ign}`!"
+        )
 
 
 def setup(bot: discord.Bot) -> None:
