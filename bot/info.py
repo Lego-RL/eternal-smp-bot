@@ -34,7 +34,7 @@ def get_players_online() -> list:
         # no players online
         return []
 
-    players = [player[:7] if "(vault)" in player else player for player in players]
+    players = [player[:-7] if "(vault)" in player else player for player in players]
 
     return players
 
