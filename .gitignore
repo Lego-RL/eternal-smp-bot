@@ -4,4 +4,4 @@
 /playerSnapshots
 *.ipynb
 local/
-bot/alias.json
+bot/config.json

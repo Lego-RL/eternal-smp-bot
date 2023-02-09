@@ -13,9 +13,6 @@ else:
     VAULT_LANG_PATH: str = os.path.join("lang", "the_vault.json")
 
 
-
-
-
 def get_player_snapshots() -> list:
 
     snapshots: list = []
@@ -185,7 +182,6 @@ def format_bounty_task_id(bounty_id: str, bounty_type: str):
     return bounty_id
 
 
-# Format Bounty's task "type"
 def format_bounty_task_type(bounty_type: str):
 
     with open(BOUNTIES_LANG_PATH, "r") as f:
@@ -198,7 +194,6 @@ def format_bounty_task_type(bounty_type: str):
     return bounty_type
 
 
-# Format Bounty's reward "id"
 def format_bounty_reward_id(bounty_id: str):
 
     # Format properly
@@ -279,7 +274,6 @@ def get_player_bounty_data(ign: str):
     Return the bounty data for an individual player.
     """
     # Read files
-    # bountiesFile = nbt.read_from_nbt_file("./files/the_vault_Bounties.dat")
     bountiesFile = get_bounty_nbt_file()
 
 
@@ -372,7 +366,3 @@ def get_player_bounty_data(ign: str):
             
     return bounties
 
-
-
-if __name__ == "__main__":
-    print(format_bm_item_id("the_vault:plain_burger"))

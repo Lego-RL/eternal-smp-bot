@@ -7,7 +7,8 @@ from discord.ext import commands, tasks
 import json
 import requests
 
-from armory import get_alias_dict, write_to_alias_file
+from armory import get_config_dict, write_to_config_file
+
 
 def get_players_online() -> list:
     """
@@ -101,11 +102,19 @@ class Info(commands.Cog):
         """
         Allow a user to set their MC username.
         """
-        data: dict = get_alias_dict()
+        data: dict = get_config_dict()
 
-        data[str(ctx.user.id)] = ign
+        if str(ctx.user.id) not in data:
+            data[str(ctx.user.id)] = {
+                "alias": ign,
+                "bounty_alerts": False,
+                "bounty_alert_pings": False
+            }
 
-        write_to_alias_file(data)
+        else:
+            data[str(ctx.user.id)]["alias"] = ign
+
+        write_to_config_file(data)
 
         await ctx.respond(
             f"Successfully tied your discord account to Minecraft user `{ign}`!"

@@ -2,13 +2,23 @@ import discord
 from discord import ApplicationContext
 
 from discord.commands import slash_command, Option
-from discord.ext import commands
+from discord.ext import commands, tasks
 
 import json
 import os
 from sys import platform
 
 from backend_data import get_player_snapshots, get_player_bm_data, get_player_bounty_data
+from embeds import get_bounty_embed
+
+def has_alias_set():
+    """
+    Command decorator to check whether user has set their MC username alias.
+    """
+    def predicate(ctx):
+        return str(ctx.user.id) in get_config_dict()
+
+    return commands.check(predicate)
 
 
 def get_player_stats(ign: str) -> dict:
@@ -26,16 +36,17 @@ def get_player_stats(ign: str) -> dict:
 
     return {}
 
-def get_alias_dict() -> dict:
+def get_config_dict() -> dict:
     """
-    Retrieve list of aliases, of mc username to discord user ids.
+    Retrieve config dict, containing info like discord -> mc username aliases,
+    preferences on being alerted for new bounties, etc.
     """
 
     if platform != "win32":
-        path: str = os.path.join("eternal-smp-bot", "bot", "alias.json")
+        path: str = os.path.join("eternal-smp-bot", "bot", "config.json")
 
     else:
-        path: str = os.path.join("bot", "alias.json")
+        path: str = os.path.join("bot", "config.json")
 
     if not os.path.isfile(path):
         # generate file if it doesn't already exist
@@ -54,17 +65,17 @@ def get_alias_dict() -> dict:
     return data
 
 
-def write_to_alias_file(data: dict) -> None:
+def write_to_config_file(data: dict) -> None:
     """
     Standardized method to write a dict to
-    the alias file.
+    the config file.
     """
 
     if platform != "win32":
-        path: str = os.path.join("eternal-smp-bot", "bot", "alias.json")
+        path: str = os.path.join("eternal-smp-bot", "bot", "config.json")
 
     else:
-        path: str = os.path.join("bot", "alias.json")
+        path: str = os.path.join("bot", "config.json")
 
     with open(path, "w") as f:
         json.dump(data, f, indent=4)
@@ -83,7 +94,10 @@ def choose_correct_ign(ctx: ApplicationContext, user=None, mc_username=None) -> 
     if mc_username:
         return (True, mc_username)
     
-    aliases: dict = get_alias_dict()
+    config: dict = get_config_dict()
+
+    #filter out other config info
+    aliases = {key: value["alias"] for key, value in config}
 
     if user:
         if str(user.id) in aliases:
@@ -103,8 +117,99 @@ def choose_correct_ign(ctx: ApplicationContext, user=None, mc_username=None) -> 
 class Armory(commands.Cog):
     def __init__(self, bot: discord.Bot) -> None:
         self.bot: discord.Bot = bot
+        self.player_bounties: dict = {}
 
-    # PLAYER SPECIFIC SLASH COMMNADS
+        self.bounty_alert_guild: discord.Guild = None #type: ignore
+        self.bounty_alert_channel: discord.TextChannel = None #type: ignore
+
+
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        """
+        Begin bounty reminder task loop 
+        """
+
+        # Eternal SMP guild ID
+        self.bounty_alert_guild = self.bot.get_guild(1064745467663102043) #type: ignore
+        self.bounty_alert_channel = self.bounty_alert_guild.get_channel(1070115776637444197) #type: ignore
+
+        self.bounty_alerts_task.start()
+
+    def cog_unload(self):
+        self.bounty_alerts_task.cancel()
+
+    
+    @tasks.loop(seconds=60)
+    async def bounty_alerts_task(self):
+        """
+        Check if any players have received new bounties, 
+        """
+
+        config: dict = get_config_dict()
+
+        # first run of task loop, initialize player bounties & wait for next loop
+        if not self.player_bounties:
+            for player_discord_id in config:
+                mc_user: str = config[player_discord_id]["alias"]
+                self.player_bounties[player_discord_id] = get_player_bounty_data(mc_user)
+            return
+
+        for player_discord_id in config:
+            mc_user: str = config[player_discord_id]["alias"]
+
+            # if user bounties not initialized, as they just opted in to alerts, initialize & move on to next user
+            if player_discord_id not in self.player_bounties:
+                self.player_bounties[player_discord_id] = get_player_bounty_data(mc_user)
+                continue
+
+            # if user has alerts on
+            if config[player_discord_id]["bounty_alerts"]:
+                current_bounty_data: list = get_player_bounty_data(mc_user) #type: ignore
+                # if no bounty data on player, skip them
+                if not current_bounty_data:
+                    break
+
+                #if anything in their bounty list has changed since last snapshot
+                if (stored_bounty_data := self.player_bounties[player_discord_id]) != current_bounty_data:
+                    stored_bounty_rewards_lists: list = [bounty["reward"]["items"] for bounty in stored_bounty_data]
+                    current_bounty_rewards_lists: list = [bounty["reward"]["items"] for bounty in current_bounty_data]
+
+                    new_bounties: list = list(set(stored_bounty_rewards_lists) - set(current_bounty_rewards_lists))
+
+                    
+                    # inform user of their new bounty/bounties
+                    title: str = f"{mc_user}'s New Bounty" if len(new_bounties) == 1 else f"{mc_user}'s New Bounties"
+                    embed: discord.Embed = get_bounty_embed(title, new_bounties, mc_user)
+
+                    if config[player_discord_id]["bounty_alert_pings"]:
+                        player_discord: discord.User = self.bot.get_user(int(player_discord_id)) #type: ignore
+                        await self.bounty_alert_channel.send(player_discord.mention, embed=embed)
+                    else:
+                        await self.bounty_alert_channel.send(embed=embed)
+
+
+
+    @has_alias_set()
+    @slash_command(name="bounty-alerts")
+    async def bounty_alerts(self, ctx: ApplicationContext, enabled: bool, 
+                            ping: Option(bool, "Receieve pings when you have new bounties", required=False)): #type: ignore
+        """
+        Opt in to receive alerts when you have new bounties.
+        """
+
+        config: dict = get_config_dict()
+
+        config[str(ctx.user.id)]["bounty_alerts"] = enabled
+        config[str(ctx.user.id)]["bounty_alert_pings"] = ping
+
+        write_to_config_file(config)
+
+        await ctx.respond(f"Successfully opted {'in to' if enabled else 'out of'} bounty alerts.")
+
+
+
+    # PLAYER SPECIFIC SLASH COMMANDS
 
     @slash_command(name="stats")
     async def stats(self, 
@@ -221,58 +326,7 @@ class Armory(commands.Cog):
 
         player_bounty_data: list = get_player_bounty_data(ign) #type: ignore
 
-        embed: discord.Embed = discord.Embed(title=f"{ign}'s Bounties")
-        embed.color = 0x7c1bd1
-
-        availability_set: set = set()
-
-        for bounty in player_bounty_data:
-            availability_set.add(bounty["availability"])
-
-        # show categories in same order every time
-        availability_order: list = ["active", "available", "complete"]
-        availability_order = [x for x in availability_order if x in availability_set]
-
-        index: int = 0
-        for availability in availability_order:
-            relevant_bounties: list = [bounty for bounty in player_bounty_data if bounty["availability"] == availability]
-
-            field_str: str = ""
-
-            for bounty in relevant_bounties:
-                # task type
-                field_str += f"**{bounty['task']['type']}**\n"
-
-                # task id : amount
-                bounty_progress: int = int(bounty["task"]["progress"]) if bounty["availability"] == "active" else 0
-                field_str += f"{bounty['task']['id']}: {bounty_progress} / {bounty['task']['amount']}\n\n"
-                
-                # rewards
-                rewards_str: str = ""
-                for reward in bounty['reward']["items"]:
-                    rewards_str += f"{reward['id']}: {reward['count']}, "
-
-                rewards_str = rewards_str[:-2]
-
-                rewards_str += f"\nExperience: {bounty['reward']['vaultExperience']}"
-
-                field_str += f"Rewards: {rewards_str}"
-
-                if bounty["availability"] == "complete":
-                    # conversion to cut off last few numbers
-                    expiry_timestamp: int = int(str(bounty["expiration"])[:10])
-
-                    field_str += f"\n\nExpires at <t:{expiry_timestamp}:f>"
-
-                if index < 2:
-                    field_str += "\n‎\n"
-
-                index += 1
-
-            embed.add_field(name=f"{availability}".title(), value=field_str, inline=False)
-
-
-        
+        embed: discord.Embed = get_bounty_embed(f"{ign}'s Bounties", player_bounty_data, ign)
 
         await ctx.respond(embed=embed)
 
@@ -296,6 +350,19 @@ class Armory(commands.Cog):
 
         else:
             await ctx.respond("There are currently no players in a vault!")
+
+
+        
+    async def cog_command_error(self, ctx: ApplicationContext, error: commands.CommandError):
+        """
+        Handle specific errors that arise in this cog.
+        """
+
+        # atm only custom decorator @has_alias_set() sets this off as intended
+        if isinstance(error, discord.errors.CheckFailure):
+            await ctx.respond("Please set your Minecraft username alias with `/alias` to use this command!")
+        else:
+            raise error  
 
 
 
