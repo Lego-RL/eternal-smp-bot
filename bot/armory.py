@@ -175,6 +175,10 @@ class Armory(commands.Cog):
                     stored_bounty_rewards_lists: list = [bounty["reward"]["items"] for bounty in stored_bounty_data]
                     current_bounty_rewards_lists: list = [bounty["reward"]["items"] for bounty in current_bounty_data]
 
+                    # make nested lists into tuples so they're hashable & can be turned into sets for set operations
+                    stored_bounty_rewards_lists = [tuple(x) for x in stored_bounty_rewards_lists]
+                    current_bounty_rewards_lists = [tuple(x) for x in current_bounty_rewards_lists]
+
                     new_bounties: list = list(set(stored_bounty_rewards_lists) - set(current_bounty_rewards_lists))
 
                     
