@@ -174,14 +174,18 @@ class Armory(commands.Cog):
                 if (stored_bounty_data := self.player_bounties[player_discord_id]) != current_bounty_data:
                     stored_bounty_rewards_lists: list = [bounty["reward"]["items"] for bounty in stored_bounty_data]
                     current_bounty_rewards_lists: list = [bounty["reward"]["items"] for bounty in current_bounty_data]
-
-                    # make nested lists into tuples so they're hashable & can be turned into sets for set operations
-                    stored_bounty_rewards_lists = [tuple(x) for x in stored_bounty_rewards_lists]
-                    current_bounty_rewards_lists = [tuple(x) for x in current_bounty_rewards_lists]
-
-                    new_bounties: list = list(set(stored_bounty_rewards_lists) - set(current_bounty_rewards_lists))
-
                     
+                    # find what bounties are new
+                    new_bounties = []
+                    for bounty in current_bounty_rewards_lists:
+                        # if bounty, matched on rewards list, is one of the bounties previously stored
+                        if any(bounty == stored_bounty for stored_bounty in stored_bounty_rewards_lists):
+                            continue
+                        
+                        # bounty doesn't match previously stored ones so it's new
+                        else:
+                            new_bounties.append(bounty)
+
                     # inform user of their new bounty/bounties
                     title: str = f"{mc_user}'s New Bounty" if len(new_bounties) == 1 else f"{mc_user}'s New Bounties"
                     embed: discord.Embed = get_bounty_embed(title, new_bounties, mc_user)
