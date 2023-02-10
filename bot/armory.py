@@ -205,7 +205,7 @@ class Armory(commands.Cog):
                     embed: discord.Embed = get_bounty_embed(title, new_bounties, mc_user) #problematic
 
                     if config[player_discord_id]["bounty_alert_pings"]:
-                        player_discord: discord.User = await self.bot.get_user(int(player_discord_id)) #type: ignore
+                        player_discord: discord.User = await self.bot.fetch_user(int(player_discord_id)) #type: ignore
                         await self.bounty_alert_channel.send(player_discord.mention, embed=embed)
                     else:
                         await self.bounty_alert_channel.send(embed=embed)
