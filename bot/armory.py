@@ -192,6 +192,11 @@ class Armory(commands.Cog):
                     # update player bounty data so new bounty is no longer seen as new
                     self.player_bounties[player_discord_id] = get_player_bounty_data(mc_user)
 
+                    # if some bounty was different but none had different rewards, aka there
+                    # are no bounties in the new_bounties list, then no need to alert
+                    if not new_bounties:
+                        return
+
                     # inform user of their new bounty/bounties
                     title: str = f"{mc_user}'s New Bounty" if len(new_bounties) == 1 else f"{mc_user}'s New Bounties"
                     embed: discord.Embed = get_bounty_embed(title, new_bounties, mc_user) #problematic
