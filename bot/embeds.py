@@ -53,7 +53,7 @@ def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> discord.
 
                 field_str += f"\n\nExpires at <t:{expiry_timestamp}:f>"
 
-            if index < 2:
+            if index < len(relevant_bounties)-1:
                 field_str += "\n‎\n"
 
             index += 1
