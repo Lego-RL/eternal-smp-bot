@@ -181,6 +181,7 @@ class Armory(commands.Cog):
                 if mc_user == "Drlegoman":
                     print("checking if bounty has changed since last snap")
                 if (stored_bounty_data := self.player_bounties[player_discord_id]) != current_bounty_data:
+                    print(f"bounties were not equal")
                     stored_bounty_rewards_lists: list = [bounty["reward"]["items"] for bounty in stored_bounty_data]
                     current_bounty_rewards_lists: list = [bounty["reward"]["items"] for bounty in current_bounty_data]
                     
@@ -189,6 +190,7 @@ class Armory(commands.Cog):
                     for bounty in current_bounty_rewards_lists:
                         # if bounty, matched on rewards list, is one of the bounties previously stored
                         if any(bounty == stored_bounty for stored_bounty in stored_bounty_rewards_lists):
+                            print(f"bounty matched a previously stored one, it is old")
                             continue
                         
                         # bounty doesn't match previously stored ones so it's new
