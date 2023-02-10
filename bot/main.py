@@ -5,9 +5,9 @@ import os
 
 load_dotenv()
 
-TESTING: bool = False
+TESTING = os.getenv("TESTING")
 
-if TESTING:
+if TESTING == "TRUE":
     TOKEN = os.getenv("TEST_TOKEN")
 else:
     TOKEN = os.getenv("BOT_TOKEN")
