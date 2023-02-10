@@ -12,6 +12,9 @@ def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> discord.
     availability_set: set = set()
 
     for bounty in player_bounty_data:
+        if isinstance(bounty, list):
+            print(bounty)
+
         availability_set.add(bounty["availability"])
 
     # show categories in same order every time
