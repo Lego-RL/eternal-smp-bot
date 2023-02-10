@@ -182,6 +182,7 @@ class Armory(commands.Cog):
                     print("checking if bounty has changed since last snap")
                 if (stored_bounty_data := self.player_bounties[player_discord_id]) != current_bounty_data:
                     print(f"bounties were not equal")
+
                     stored_bounty_rewards_lists: list = [bounty["reward"]["items"] for bounty in stored_bounty_data]
                     current_bounty_rewards_lists: list = [bounty["reward"]["items"] for bounty in current_bounty_data]
                     
@@ -195,11 +196,12 @@ class Armory(commands.Cog):
                         
                         # bounty doesn't match previously stored ones so it's new
                         else:
-                            new_bounties.append(bounty)
+                            #bounty[0] because each list of bounty rewards
+                            new_bounties.append(bounty[0])
 
                     # inform user of their new bounty/bounties
                     title: str = f"{mc_user}'s New Bounty" if len(new_bounties) == 1 else f"{mc_user}'s New Bounties"
-                    embed: discord.Embed = get_bounty_embed(title, new_bounties, mc_user)
+                    embed: discord.Embed = get_bounty_embed(title, new_bounties, mc_user) #problematic
 
                     if config[player_discord_id]["bounty_alert_pings"]:
                         player_discord: discord.User = self.bot.get_user(int(player_discord_id)) #type: ignore
