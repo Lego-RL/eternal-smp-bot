@@ -55,6 +55,7 @@
     "rewards": {
         "item.minecraft.diamond": "Diamond",
         "item.minecraft.elytra": "Elytra",
-        "item.minecraft.netherite_ingot": "Netherite Ingot"
+        "item.minecraft.netherite_ingot": "Netherite Ingot",
+        "item.minecraft.urmom": "Your Mom"
     }
 }
