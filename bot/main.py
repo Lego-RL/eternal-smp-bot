@@ -7,7 +7,7 @@ load_dotenv()
 
 TESTING = os.getenv("TESTING")
 
-if TESTING == "TRUE":
+if TESTING == "TRUE" or TESTING == True:
     TOKEN = os.getenv("TEST_TOKEN")
 else:
     TOKEN = os.getenv("BOT_TOKEN")
