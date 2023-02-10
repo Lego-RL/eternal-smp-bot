@@ -361,16 +361,16 @@ class Armory(commands.Cog):
 
 
         
-    async def cog_command_error(self, ctx: ApplicationContext, error: commands.CommandError):
-        """
-        Handle specific errors that arise in this cog.
-        """
+    # async def cog_command_error(self, ctx: ApplicationContext, error: commands.CommandError):
+    #     """
+    #     Handle specific errors that arise in this cog.
+    #     """
 
-        # atm only custom decorator @has_alias_set() sets this off as intended
-        if isinstance(error, discord.errors.CheckFailure):
-            await ctx.respond("Please set your Minecraft username alias with `/alias` to use this command!")
-        else:
-            raise error  
+    #     # atm only custom decorator @has_alias_set() sets this off as intended
+    #     if isinstance(error, discord.errors.CheckFailure):
+    #         await ctx.respond("Please set your Minecraft username alias with `/alias` to use this command!")
+    #     else:
+    #         raise error  
 
 
 
