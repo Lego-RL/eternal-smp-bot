@@ -13,7 +13,7 @@ def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> discord.
 
     for bounty in player_bounty_data:
         if isinstance(bounty, list):
-            print(bounty)
+            print(f"{bounty=}\n\n\n and {player_bounty_data=}")
 
         availability_set.add(bounty["availability"])
 
