@@ -188,7 +188,7 @@ class Armory(commands.Cog):
                     
                     # find what bounties are new
                     new_bounties = []
-                    for bounty in current_bounty_rewards_lists:
+                    for i, bounty in enumerate(current_bounty_rewards_lists):
                         # if bounty, matched on rewards list, is one of the bounties previously stored
                         if any(bounty == stored_bounty for stored_bounty in stored_bounty_rewards_lists):
                             print(f"bounty matched a previously stored one, it is old")
@@ -197,7 +197,8 @@ class Armory(commands.Cog):
                         # bounty doesn't match previously stored ones so it's new
                         else:
                             #bounty[0] because each list of bounty rewards
-                            new_bounties.append(bounty[0])
+                            # new_bounties.append(bounty)
+                            new_bounties.append(current_bounty_data[i])
 
                     # inform user of their new bounty/bounties
                     title: str = f"{mc_user}'s New Bounty" if len(new_bounties) == 1 else f"{mc_user}'s New Bounties"
