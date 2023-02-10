@@ -150,7 +150,6 @@ class Armory(commands.Cog):
 
         # first run of task loop, initialize player bounties & wait for next loop
         if not self.player_bounties:
-            print("populating self.player_bounties")
             for player_discord_id in config:
                 mc_user: str = config[player_discord_id]["alias"]
                 self.player_bounties[player_discord_id] = get_player_bounty_data(mc_user)
@@ -158,12 +157,8 @@ class Armory(commands.Cog):
             # print(f"now {self.player_bounties=}")
             return
 
-        print(f"looking thru players in {config=}")
         for player_discord_id in config:
             mc_user: str = config[player_discord_id]["alias"]
-
-            if mc_user == "Drlegoman":
-                print("on legos")
 
             # if user bounties not initialized, as they just opted in to alerts, initialize & move on to next user
             if player_discord_id not in self.player_bounties:
@@ -178,10 +173,7 @@ class Armory(commands.Cog):
                     break
 
                 #if anything in their bounty list has changed since last snapshot
-                if mc_user == "Drlegoman":
-                    print("checking if bounty has changed since last snap")
                 if (stored_bounty_data := self.player_bounties[player_discord_id]) != current_bounty_data:
-                    print(f"bounties were not equal")
 
                     stored_bounty_rewards_lists: list = [bounty["reward"]["items"] for bounty in stored_bounty_data]
                     current_bounty_rewards_lists: list = [bounty["reward"]["items"] for bounty in current_bounty_data]
@@ -191,7 +183,6 @@ class Armory(commands.Cog):
                     for i, bounty in enumerate(current_bounty_rewards_lists):
                         # if bounty, matched on rewards list, is one of the bounties previously stored
                         if any(bounty == stored_bounty for stored_bounty in stored_bounty_rewards_lists):
-                            print(f"bounty matched a previously stored one, it is old")
                             continue
                         
                         # bounty doesn't match previously stored ones so it's new
