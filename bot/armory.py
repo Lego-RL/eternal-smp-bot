@@ -97,7 +97,7 @@ def choose_correct_ign(ctx: ApplicationContext, user=None, mc_username=None) -> 
     config: dict = get_config_dict()
 
     #filter out other config info
-    aliases = {key: value["alias"] for key, value in config}
+    aliases = {key: value["alias"] for key, value in config.items()}
 
     if user:
         if str(user.id) in aliases:
@@ -374,8 +374,8 @@ class Armory(commands.Cog):
 
 
 
-if __name__ == "__main__":
-    pass
+# if __name__ == "__main__":
+#     result = choose_correct_ign(None, mc_username="Drlegoman")
 
 
 def setup(bot: discord.Bot) -> None:

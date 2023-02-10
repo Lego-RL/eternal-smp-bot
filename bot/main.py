@@ -4,7 +4,13 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-TOKEN = os.getenv("BOT_TOKEN")
+
+TESTING: bool = False
+
+if TESTING:
+    TOKEN = os.getenv("TEST_TOKEN")
+else:
+    TOKEN = os.getenv("BOT_TOKEN")
 
 
 bot = discord.Bot()
