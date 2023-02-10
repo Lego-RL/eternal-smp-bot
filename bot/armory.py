@@ -196,9 +196,10 @@ class Armory(commands.Cog):
                         
                         # bounty doesn't match previously stored ones so it's new
                         else:
-                            #bounty[0] because each list of bounty rewards
-                            # new_bounties.append(bounty)
                             new_bounties.append(current_bounty_data[i])
+
+                    # update player bounty data so new bounty is no longer seen as new
+                    self.player_bounties[player_discord_id] = get_player_bounty_data(mc_user)
 
                     # inform user of their new bounty/bounties
                     title: str = f"{mc_user}'s New Bounty" if len(new_bounties) == 1 else f"{mc_user}'s New Bounties"
