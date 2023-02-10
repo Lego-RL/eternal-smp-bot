@@ -155,12 +155,15 @@ class Armory(commands.Cog):
                 mc_user: str = config[player_discord_id]["alias"]
                 self.player_bounties[player_discord_id] = get_player_bounty_data(mc_user)
 
-            print(f"now {self.player_bounties=}")
+            # print(f"now {self.player_bounties=}")
             return
 
         print(f"looking thru players in {config=}")
         for player_discord_id in config:
             mc_user: str = config[player_discord_id]["alias"]
+
+            if mc_user == "Drlegoman":
+                print("on legos")
 
             # if user bounties not initialized, as they just opted in to alerts, initialize & move on to next user
             if player_discord_id not in self.player_bounties:
