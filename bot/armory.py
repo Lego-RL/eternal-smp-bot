@@ -140,7 +140,7 @@ class Armory(commands.Cog):
         self.bounty_alerts_task.cancel()
 
     
-    @tasks.loop(seconds=60)
+    @tasks.loop(seconds=20)
     async def bounty_alerts_task(self):
         """
         Check if any players have received new bounties, 
@@ -150,11 +150,15 @@ class Armory(commands.Cog):
 
         # first run of task loop, initialize player bounties & wait for next loop
         if not self.player_bounties:
+            print("populating self.player_bounties")
             for player_discord_id in config:
                 mc_user: str = config[player_discord_id]["alias"]
                 self.player_bounties[player_discord_id] = get_player_bounty_data(mc_user)
+
+            print(f"now {self.player_bounties=}")
             return
 
+        print(f"looking thru players in {config=}")
         for player_discord_id in config:
             mc_user: str = config[player_discord_id]["alias"]
 
