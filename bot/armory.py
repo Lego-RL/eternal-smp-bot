@@ -178,6 +178,8 @@ class Armory(commands.Cog):
                     break
 
                 #if anything in their bounty list has changed since last snapshot
+                if mc_user == "Drlegoman":
+                    print("checking if bounty has changed since last snap")
                 if (stored_bounty_data := self.player_bounties[player_discord_id]) != current_bounty_data:
                     stored_bounty_rewards_lists: list = [bounty["reward"]["items"] for bounty in stored_bounty_data]
                     current_bounty_rewards_lists: list = [bounty["reward"]["items"] for bounty in current_bounty_data]
