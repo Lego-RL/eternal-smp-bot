@@ -10,11 +10,11 @@ from sys import platform
 
 import data.bounties as bounties
 
-from main import TESTING
-
 from backend_data import get_player_snapshots, get_player_bm_data
 from data.bounties import get_player_bounty_data
 from embeds import get_bounty_embed
+
+TESTING = os.getenv("TESTING")
 
 def has_alias_set():
     """
