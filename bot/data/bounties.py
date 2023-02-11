@@ -120,7 +120,7 @@ def get_player_bounty_data(ign: str):
                 bounty_task_id,
                 [
                     {
-                        "file_path": get_file("data"),
+                        "file_path": get_file("lang"),
                         "id_path": f"tasks.{bounty_task_type}.ids"
                     }
                 ]
@@ -129,7 +129,7 @@ def get_player_bounty_data(ign: str):
                 bounty_task_type,
                 [
                     {
-                        "file_path": get_file("data"),
+                        "file_path": get_file("lang"),
                         "id_path": "tasks",
                         "name_path": f"tasks.{bounty_task_type}.name"
                     }
