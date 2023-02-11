@@ -31,7 +31,6 @@ def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> EmbedWit
     availability_order: list = ["active", "available", "complete"]
     availability_order = [x for x in availability_order if x in availability_set]
 
-    index: int = 0
     for availability in availability_order:
         relevant_bounties: list = [bounty for bounty in player_bounty_data if bounty["availability"] == availability]
 
@@ -62,11 +61,12 @@ def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> EmbedWit
 
                 field_str += f"\n\nExpires at <t:{expiry_timestamp}:f>"
 
-            if index < len(relevant_bounties)-1:
-                field_str += "\n‎\n"
+            # add newlines + invisible character after every bounty
+            # then delete final newlines/invis character afterward
+            field_str += "\n‎\n"
 
-            index += 1
-
+        if field_str:
+            field_str = field_str[:-3]
         embed.add_field(name=f"{availability}".title(), value=field_str, inline=False)
 
     embed_obj: EmbedWithImage = EmbedWithImage(embed, head_render)
