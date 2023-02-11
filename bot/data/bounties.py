@@ -1,5 +1,4 @@
 # Project imports
-import bounties
 import util.uuid as uuid
 
 # Other imports
@@ -38,7 +37,7 @@ def get_bounty_player_order() -> list:
     match with proper bounty data
     """
 
-    file = bounties.get_file()
+    file = get_file()
 
     uuid_dict: dict = uuid.get_uuid_username_dict()
     player_order: list = []
@@ -54,12 +53,12 @@ def get_all_bounty_data() -> dict:
     Return the bounty data for all players
     """
 
-    bounty_player_order: list = bounties.get_bounty_player_order()
+    bounty_player_order: list = get_bounty_player_order()
 
     bounty_data: dict = {}
 
     for player in bounty_player_order:
-        bounty_data[player] = bounties.get_player_bounty_data(player)
+        bounty_data[player] = get_player_bounty_data(player)
 
     return bounty_data
 
@@ -70,7 +69,7 @@ def get_player_bounty_data(ign: str):
     """
 
     # Retrieve bounty file
-    bounties_file = bounties.get_file("data")
+    bounties_file = get_file("data")
 
     # Retrieve player UUID
     playerUUID = uuid.get_uuid_from_ign(ign)
@@ -101,7 +100,7 @@ def get_player_bounty_data(ign: str):
             bounty_task_amount: int = round(bounty_task_details['amount'].value) #type: ignore
             bounty_task_id: str
 
-            with open(bounties.get_file("lang"), "r") as f:
+            with open(get_file("lang"), "r") as f:
                 
                 # Retrieve bounties.json data
                 bounties_lang: dict = json.load(f)
@@ -120,7 +119,7 @@ def get_player_bounty_data(ign: str):
                 bounty_task_id,
                 [
                     {
-                        "file_path": bounties.get_file("data"),
+                        "file_path": get_file("data"),
                         "id_path": f"tasks.{bounty_task_type}.ids"
                     }
                 ]
@@ -129,7 +128,7 @@ def get_player_bounty_data(ign: str):
                 bounty_task_type,
                 [
                     {
-                        "file_path": bounties.get_file("data"),
+                        "file_path": get_file("data"),
                         "id_path": "tasks",
                         "name_path": f"tasks.{bounty_task_type}.name"
                     }
