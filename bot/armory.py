@@ -184,6 +184,10 @@ class Armory(commands.Cog):
                         # if bounty, matched on rewards list, is one of the bounties previously stored
                         if any(bounty == stored_bounty for stored_bounty in stored_bounty_rewards_lists):
                             continue
+
+                        # if user has already accepted or completed bounty, no need to alert them for it
+                        elif current_bounty_data[i]["availability"] != "available":
+                            continue
                         
                         # bounty doesn't match previously stored ones so it's new
                         else:
