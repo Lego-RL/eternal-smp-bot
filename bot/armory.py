@@ -10,6 +10,8 @@ from sys import platform
 
 import data.bounties as bounties
 
+import main
+
 from backend_data import get_player_snapshots, get_player_bm_data
 from data.bounties import get_player_bounty_data
 from embeds import get_bounty_embed
@@ -46,7 +48,10 @@ def get_config_dict() -> dict:
     """
 
     if platform != "win32":
-        path: str = os.path.join("eternal-smp-bot", "bot", "config.json")
+        if main.TESTING == False:
+            path: str = os.path.join("eternal-smp-bot", "bot", "config.json")
+        else:
+            path: str = os.path.join("test-eternal-smp-bot", "bot", "config.json")
 
     else:
         path: str = os.path.join("bot", "config.json")
@@ -75,7 +80,10 @@ def write_to_config_file(data: dict) -> None:
     """
 
     if platform != "win32":
-        path: str = os.path.join("eternal-smp-bot", "bot", "config.json")
+        if main.TESTING == False:
+            path: str = os.path.join("eternal-smp-bot", "bot", "config.json")
+        else:
+            path: str = os.path.join("test-eternal-smp-bot", "bot", "config.json")
 
     else:
         path: str = os.path.join("bot", "config.json")

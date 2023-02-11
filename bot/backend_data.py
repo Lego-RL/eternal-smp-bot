@@ -5,10 +5,15 @@ from sys import platform
 import python_nbt.nbt as nbt
 
 import util.uuid as uuid
+import main
 
 if platform != "win32":
-    VAULT_LANG_PATH: str = os.path.join("eternal-smp-bot", "lang", "the_vault.json")
-    OTHER_PATH: str = os.path.join("eternal-smp-bot", "lang", "other.json")
+    if main.TESTING == False:
+        VAULT_LANG_PATH: str = os.path.join("eternal-smp-bot", "lang", "the_vault.json")
+        OTHER_PATH: str = os.path.join("eternal-smp-bot", "lang", "other.json")
+    else:
+        VAULT_LANG_PATH: str = os.path.join("test-eternal-smp-bot", "lang", "the_vault.json")
+        OTHER_PATH: str = os.path.join("test-eternal-smp-bot", "lang", "other.json")
 
 else:
     VAULT_LANG_PATH: str = os.path.join("lang", "the_vault.json")
