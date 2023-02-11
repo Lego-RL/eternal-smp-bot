@@ -1,27 +1,7 @@
 # Project imports
 import json
-import data.bounties as bounties
 
 from backend_data import VAULT_LANG_PATH, OTHER_PATH
-
-# Other imports
-import os
-from sys import platform
-
-
-
-# Initiate files relating to bounties
-files = {
-    "data": "",
-    "lang": ""
-}
-
-if platform != "win32":
-    files["data"] = os.path.join("world", "data", "the_vault_Bounties.dat")
-    files["lang"] = os.path.join("eternal-smp-bot", "lang", "bounties.json")
-else:
-    files["data"] = os.path.join("local", "dats", "the_vault_Bounties.dat")
-    files["lang"] = os.path.join("lang", "bounties.json")
 
 
 

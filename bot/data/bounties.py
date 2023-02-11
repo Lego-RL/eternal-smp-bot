@@ -1,5 +1,6 @@
 # Project imports
 import util.uuid as uuid
+import util.format as format
 
 # Other imports
 import os
