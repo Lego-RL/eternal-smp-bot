@@ -1,7 +1,7 @@
 # Project imports
 import util.uuid as uuid
 import util.format as format
-import main
+from main import TESTING
 
 # Other imports
 import os
@@ -19,7 +19,7 @@ files = {
 
 if platform != "win32":
     files["data"] = os.path.join("world", "data", "the_vault_Bounties.dat")
-    if main.TESTING == False:
+    if TESTING == False:
         files["lang"] = os.path.join("eternal-smp-bot", "lang", "bounties.json")
     else:
         files["lang"] = os.path.join("test-eternal-smp-bot", "lang", "bounties.json")
