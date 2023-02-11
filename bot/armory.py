@@ -8,6 +8,8 @@ import json
 import os
 from sys import platform
 
+import data.bounties as bounties
+
 from backend_data import get_player_snapshots, get_player_bm_data, get_player_bounty_data
 from embeds import get_bounty_embed
 
@@ -152,7 +154,7 @@ class Armory(commands.Cog):
         if not self.player_bounties:
             for player_discord_id in config:
                 mc_user: str = config[player_discord_id]["alias"]
-                self.player_bounties[player_discord_id] = get_player_bounty_data(mc_user)
+                self.player_bounties[player_discord_id] = bounties.get_player_bounty_data(mc_user)
 
             # print(f"now {self.player_bounties=}")
             return
@@ -162,12 +164,12 @@ class Armory(commands.Cog):
 
             # if user bounties not initialized, as they just opted in to alerts, initialize & move on to next user
             if player_discord_id not in self.player_bounties:
-                self.player_bounties[player_discord_id] = get_player_bounty_data(mc_user)
+                self.player_bounties[player_discord_id] = bounties.get_player_bounty_data(mc_user)
                 continue
 
             # if user has alerts on
             if config[player_discord_id]["bounty_alerts"]:
-                current_bounty_data: list = get_player_bounty_data(mc_user) #type: ignore
+                current_bounty_data: list = bounties.get_player_bounty_data(mc_user) #type: ignore
                 # if no bounty data on player, skip them
                 if not current_bounty_data:
                     break
@@ -338,7 +340,7 @@ class Armory(commands.Cog):
 
         ign: str = result_str
 
-        player_bounty_data: list = get_player_bounty_data(ign) #type: ignore
+        player_bounty_data: list = bounties.get_player_bounty_data(ign) #type: ignore
 
         embed: discord.Embed = get_bounty_embed(f"{ign}'s Bounties", player_bounty_data, ign)
 
