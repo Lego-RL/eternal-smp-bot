@@ -37,7 +37,7 @@ def get_bounty_player_order() -> list:
     match with proper bounty data
     """
 
-    file = get_file()
+    file = nbt.read_from_nbt_file(get_file("data"))
 
     uuid_dict: dict = uuid.get_uuid_username_dict()
     player_order: list = []
@@ -69,7 +69,7 @@ def get_player_bounty_data(ign: str):
     """
 
     # Retrieve bounty file
-    bounties_file = get_file("data")
+    bounties_file = nbt.read_from_nbt_file(get_file("data"))
 
     # Retrieve player UUID
     playerUUID = uuid.get_uuid_from_ign(ign)
