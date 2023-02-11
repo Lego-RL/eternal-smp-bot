@@ -4,6 +4,8 @@ from sys import platform
 
 import python_nbt.nbt as nbt
 
+import util.uuid as uuid
+
 if platform != "win32":
     VAULT_LANG_PATH: str = os.path.join("eternal-smp-bot", "lang", "the_vault.json")
     OTHER_PATH: str = os.path.join("eternal-smp-bot", "lang", "other.json")
@@ -31,7 +33,7 @@ def get_uuid_from_ign(ign: str):
     Return user's UUID given their ign
     """
 
-    player_uuid_dict: dict = get_player_uuid_dict()
+    player_uuid_dict: dict = uuid.get_uuid_username_dict()
 
     for key, value in player_uuid_dict.items():
         if value == ign:
@@ -98,7 +100,7 @@ def get_bm_player_order() -> list:
 
     file = get_bm_nbt_file()
 
-    uuid_dict: dict = get_player_uuid_dict()
+    uuid_dict: dict = uuid.get_uuid_username_dict()
     player_order: list = []
 
     for uuid in file["data"]["playerList"].value:
