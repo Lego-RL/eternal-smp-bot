@@ -10,7 +10,8 @@ from sys import platform
 
 import data.bounties as bounties
 
-from backend_data import get_player_snapshots, get_player_bm_data, get_player_bounty_data
+from backend_data import get_player_snapshots, get_player_bm_data
+from data.bounties import get_player_bounty_data
 from embeds import get_bounty_embed
 
 def has_alias_set():
