@@ -29,7 +29,7 @@ def format_id(object_id: str, alternate_files: list = []) -> str:
         # Retrieve variables
         file_path = file.get("file_path")
         id_path = file.get("id_path")
-        name_path = file.get("name_path") if "name_path" in file.keys else id_path
+        name_path = file.get("name_path") if file.get("name_path") != None else id_path
 
         with open(file_path, "r") as f:
 
