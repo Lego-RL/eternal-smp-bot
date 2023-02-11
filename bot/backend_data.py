@@ -1,6 +1,8 @@
+# Other imports
 import json
 import os
 from sys import platform
+from typing import Union
 
 import python_nbt.nbt as nbt
 
@@ -26,7 +28,7 @@ def get_player_snapshots() -> list:
     return snapshots
 
 
-def get_uuid_from_ign(ign: str):
+def get_uuid_from_ign(ign: str) -> Union[str, None]:
     """
     Return user's UUID given their ign
     """

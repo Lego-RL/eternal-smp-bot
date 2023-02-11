@@ -1,6 +1,11 @@
-import discord
+# Project Imports
+from image import EmbedWithImage, get_player_head_file_ign
 
-def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> discord.Embed:
+# Other imports
+import discord
+from typing import Union
+
+def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> EmbedWithImage:
     """
     Return an embed with given title and data on
     bounties in given bounty list.
@@ -8,6 +13,10 @@ def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> discord.
 
     embed: discord.Embed = discord.Embed(title=title)
     embed.color = 0x7c1bd1
+
+    head_render: Union[discord.File, None] = get_player_head_file_ign(ign)
+    if head_render:
+        embed.set_thumbnail(url="attachment://image.png")
 
     availability_set: set = set()
 
@@ -60,4 +69,5 @@ def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> discord.
 
         embed.add_field(name=f"{availability}".title(), value=field_str, inline=False)
 
-    return embed
+    embed_obj: EmbedWithImage = EmbedWithImage(embed, head_render)
+    return embed_obj
