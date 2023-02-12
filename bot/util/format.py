@@ -1,5 +1,6 @@
 # Project imports
 import json
+import re
 
 from backend_data import VAULT_LANG_PATH, OTHER_PATH
 
@@ -41,17 +42,16 @@ def format_id(object_id: str, alternate_files: list = []) -> str:
                 data_id_path = data_id_path[path_child] #type: ignore
 
             # Check if id exists in id path
-            if object_id not in data_id_path:
-                continue
+            if object_id in data_id_path:
             
-            # Retrieve name from name path
-            data_name_path = data
-            if name_path == id_path:
-                return data_id_path.get(object_id)
-            else:
-                for path_child in name_path.split(".")[:-1]:
-                    data_name_path = data_name_path[path_child]
-                return data_name_path.get(name_path.split(".")[-1])
+                # Retrieve name from name path
+                data_name_path = data
+                if name_path == id_path:
+                    return data_id_path.get(object_id)
+                else:
+                    for path_child in name_path.split(".")[:-1]:
+                        data_name_path = data_name_path[path_child]
+                    return data_name_path.get(name_path.split(".")[-1])
 
     # Retrieve default paths
     default_files = [
@@ -68,8 +68,8 @@ def format_id(object_id: str, alternate_files: list = []) -> str:
 
             # Check if id is listed
             for key in data:
-                if object_id in key:
-                    return data.get(object_id) #type: ignore
+                if bool(re.search(f'$.{object_id}', key)):
+                    return data.get(key) #type: ignore
 
     # Return id (default)
     return object_id
