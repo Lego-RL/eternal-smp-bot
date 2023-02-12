@@ -43,7 +43,7 @@ def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> discord.
 
             rewards_str = rewards_str[:-2]
 
-            rewards_str += f"\nExperience: {bounty['reward']['vaultExperience']}"
+            rewards_str += f"\nExperience: {bounty['reward']['vault_experience']}"
 
             field_str += f"Rewards: {rewards_str}"
 
@@ -51,7 +51,7 @@ def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> discord.
                 # conversion to cut off last few numbers
                 expiry_timestamp: int = int(str(bounty["refresh_time"])[:10])
 
-                field_str += f"\n\nExpires at <t:{expiry_timestamp}:f>"
+                field_str += f"\n\nRefreshes in <t:{expiry_timestamp}:f>"
 
             if index < len(relevant_bounties)-1:
                 field_str += "\n‎\n"
