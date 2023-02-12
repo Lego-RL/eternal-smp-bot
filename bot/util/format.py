@@ -43,11 +43,13 @@ def format_id(object_id: str, alternate_files: list = []) -> str:
             # Retrieve name from name path
             data_name_path = data
             if name_path == id_path:
-                return data_id_path.get(object_id)
+                if object_id in data_id_path.keys():
+                    return data_id_path.get(object_id)
             else:
                 for path_child in name_path.split(".")[:-1]:
                     data_name_path = data_name_path[(path_child)]
-                return data_name_path.get(name_path.split(".")[-1])
+                if object_id in data_name_path.keys():
+                    return data_name_path.get(name_path.split(".")[-1])
 
     # Retrieve default paths
     default_files = [
