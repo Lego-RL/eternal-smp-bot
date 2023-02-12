@@ -4,7 +4,6 @@ from sys import platform
 
 import python_nbt.nbt as nbt
 
-import util.uuid as uuid
 from main import TESTING
 
 if platform != "win32":
@@ -18,45 +17,6 @@ if platform != "win32":
 else:
     VAULT_LANG_PATH: str = os.path.join("lang", "the_vault.json")
     OTHER_PATH: str = os.path.join("lang", "other.json")
-
-
-def get_player_snapshots() -> list:
-
-    snapshots: list = []
-
-    files: list = os.listdir("playerSnapshots")
-    
-    for file in files:
-        with open(f"playerSnapshots/{file}", "r") as f:
-            snapshots.append(json.load(f))
-
-    return snapshots
-
-
-def get_uuid_from_ign(ign: str):
-    """
-    Return user's UUID given their ign
-    """
-
-    player_uuid_dict: dict = uuid.get_uuid_username_dict()
-
-    for key, value in player_uuid_dict.items():
-        if value == ign:
-            return key
-
-
-def get_player_uuid_dict() -> dict:
-    """
-    Return a dictionary of all players and their associated UUIDs.
-    """
-
-    snapshots: list = get_player_snapshots()
-    player_uuids: dict = {}
-
-    for snapshot in snapshots:
-        player_uuids[snapshot["playerUUID"]] = snapshot["playerNickname"]
-
-    return player_uuids
 
 
 def get_bm_nbt_file():
