@@ -13,14 +13,6 @@ else:
     TOKEN = os.getenv("BOT_TOKEN")
 
 
-bot = discord.Bot()
-
-
-extensions = ['admin', 'armory', 'info']
-
-for ext in extensions:
-    bot.load_extension(ext)
-
 
 @bot.event
 async def on_ready():
@@ -32,4 +24,12 @@ async def on_ready():
 
 
 if __name__ == "__main__":
+
+    bot = discord.Bot()
+
+    extensions = ['admin', 'armory', 'info']
+
+    for ext in extensions:
+        bot.load_extension(ext)
+    
     bot.run(TOKEN)

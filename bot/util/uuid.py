@@ -1,5 +1,5 @@
 # Project imports
-import backend_data
+import data.snapshots as snapshots
 
 def get_uuid_from_ign(ign: str):
     """
@@ -18,7 +18,7 @@ def get_uuid_username_dict() -> dict:
     Return a dictionary of all UUIDs and their associated players.
     """
 
-    snapshots: list = backend_data.get_player_snapshots()
+    snapshots: list = snapshots.get_player_snapshots()
     player_uuids: dict = {}
 
     for snapshot in snapshots:
