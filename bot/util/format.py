@@ -68,7 +68,7 @@ def format_id(object_id: str, alternate_files: list = []) -> str:
 
             # Check if id is listed
             for key in data.keys():
-                if key == object_id or bool(re.search(f'$.{object_id}', key)):
+                if key == object_id or re.match(f'\.{object_id}$', key):
                     return data.get(key) #type: ignore
 
     # Return id (default)
