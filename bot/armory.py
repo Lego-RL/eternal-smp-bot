@@ -1,3 +1,9 @@
+# Project imports
+from backend_data import get_player_snapshots, get_player_bm_data, get_player_bounty_data
+from embeds import get_bounty_embed
+from image import EmbedWithImage
+
+# Other imports
 import discord
 from discord import ApplicationContext
 
@@ -8,8 +14,6 @@ import json
 import os
 from sys import platform
 
-from backend_data import get_player_snapshots, get_player_bm_data, get_player_bounty_data
-from embeds import get_bounty_embed
 
 def has_alias_set():
     """
@@ -203,13 +207,19 @@ class Armory(commands.Cog):
 
                     # inform user of their new bounty/bounties
                     title: str = f"{mc_user}'s New Bounty" if len(new_bounties) == 1 else f"{mc_user}'s New Bounties"
-                    embed: discord.Embed = get_bounty_embed(title, new_bounties, mc_user) #problematic
+                    embed_obj: EmbedWithImage = get_bounty_embed(title, new_bounties, mc_user) #problematic
 
                     if config[player_discord_id]["bounty_alert_pings"]:
                         player_discord: discord.User = await self.bot.fetch_user(int(player_discord_id)) #type: ignore
-                        await self.bounty_alert_channel.send(player_discord.mention, embed=embed)
+                        if embed_obj.image_file:
+                            await self.bounty_alert_channel.send(player_discord.mention, file=embed_obj.image_file, embed=embed_obj.embed)
+                        else:
+                            await self.bounty_alert_channel.send(player_discord.mention, embed=embed_obj.embed)
                     else:
-                        await self.bounty_alert_channel.send(embed=embed)
+                        if embed_obj.image_file:
+                            await self.bounty_alert_channel.send(file=embed_obj.image_file, embed=embed_obj.embed)
+                        else:
+                            await self.bounty_alert_channel.send(embed=embed_obj.embed)
 
 
 
@@ -349,9 +359,13 @@ class Armory(commands.Cog):
 
         player_bounty_data: list = get_player_bounty_data(ign) #type: ignore
 
-        embed: discord.Embed = get_bounty_embed(f"{ign}'s Bounties", player_bounty_data, ign)
+        embed_obj: EmbedWithImage = get_bounty_embed(f"{ign}'s Bounties", player_bounty_data, ign)
 
-        await ctx.respond(embed=embed)
+        if embed_obj.image_file:
+            await ctx.respond(file=embed_obj.image_file, embed=embed_obj.embed)
+
+        else:
+            await ctx.respond(embed=embed_obj.embed)
 
     # PLAYER AGNOSTIC SLASH COMMANDS
 
