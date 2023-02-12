@@ -4,6 +4,7 @@ from sys import platform
 
 import python_nbt.nbt as nbt
 
+import util.uuid as uuid
 from main import TESTING
 
 if platform != "win32":
