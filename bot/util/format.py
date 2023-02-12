@@ -38,17 +38,17 @@ def format_id(object_id: str, alternate_files: list = []) -> str:
             # Retrieve id from id path
             data_id_path = data
             for path_child in id_path.split("."):
-                data_id_path = data_id_path[(path_child)] #type: ignore
+                data_id_path = data_id_path[path_child] #type: ignore
             
             # Retrieve name from name path
             data_name_path = data
             if name_path == id_path:
-                if object_id in data_id_path.keys():
+                if object_id in data_id_path:
                     return data_id_path.get(object_id)
             else:
                 for path_child in name_path.split(".")[:-1]:
-                    data_name_path = data_name_path[(path_child)]
-                if object_id in data_name_path.keys():
+                    data_name_path = data_name_path[path_child]
+                if object_id in data_name_path:
                     return data_name_path.get(name_path.split(".")[-1])
 
     # Retrieve default paths
@@ -65,7 +65,7 @@ def format_id(object_id: str, alternate_files: list = []) -> str:
             data: dict = json.load(f)
 
             # Check if id is listed
-            for key in data.keys():
+            for key in data:
                 if object_id in key:
                     return data.get(object_id) #type: ignore
 
