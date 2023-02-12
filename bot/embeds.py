@@ -33,7 +33,7 @@ def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> discord.
             field_str += f"**{bounty['task']['type']}**\n"
 
             # task id : amount
-            bounty_progress: int = int(bounty["task"]["progress"]) if bounty["availability"] == "active" else 0
+            bounty_progress: int = int(bounty["task"]["amount_obtained"])
             field_str += f"{bounty['task']['id']}: {bounty_progress} / {bounty['task']['amount']}\n\n"
             
             # rewards
@@ -49,7 +49,7 @@ def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> discord.
 
             if bounty["availability"] == "complete":
                 # conversion to cut off last few numbers
-                expiry_timestamp: int = int(str(bounty["expiration"])[:10])
+                expiry_timestamp: int = int(str(bounty["refresh_time"])[:10])
 
                 field_str += f"\n\nExpires at <t:{expiry_timestamp}:f>"
 
