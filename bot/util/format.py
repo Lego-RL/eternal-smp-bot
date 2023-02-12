@@ -65,8 +65,9 @@ def format_id(object_id: str, alternate_files: list = []) -> str:
             data: dict = json.load(f)
 
             # Check if id is listed
-            if object_id in data.keys():
-                return data.get(object_id) #type: ignore
+            for key in data.keys():
+                if object_id in key:
+                    return data.get(object_id) #type: ignore
 
     # Return id (default)
     return object_id

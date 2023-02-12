@@ -115,10 +115,10 @@ def get_player_bounty_data(ign: str):
                 bounty_task_id = bounty_task_details[bounties_lang["tasks"][bounty_task_type]["taskId"]].value #type: ignore
             
             # Pre-format ids
-            bounty_task_id_prefix = "item."
-            if bounty_task_id in ["the_vault:vault_bronze", "the_vault:vault_silver", "the_vault:vault_gold"]:
-                bounty_task_id_prefix = "block."
-            bounty_task_id = bounty_task_id_prefix + bounty_task_id.replace(":", ".") #type: ignore
+            # bounty_task_id_prefix = "item."
+            # if bounty_task_id in ["the_vault:vault_bronze", "the_vault:vault_silver", "the_vault:vault_gold"]:
+            #     bounty_task_id_prefix = "block."
+            # bounty_task_id = bounty_task_id_prefix + bounty_task_id.replace(":", ".") #type: ignore
 
             # Format ids
             bounty_task_id = format.format_id(
