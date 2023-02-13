@@ -11,7 +11,7 @@ from sys import platform
 import data.bounties as bounties
 
 from data.snapshots import get_player_snapshots
-from backend_data import get_player_bm_data
+from data.black_market import get_player_black_market_data
 from data.bounties import get_player_bounty_data
 from embeds import get_bounty_embed
 
@@ -314,7 +314,7 @@ class Armory(commands.Cog):
 
         ign: str = result_str
 
-        player_bm_data: dict = get_player_bm_data(ign)
+        player_bm_data: dict = get_player_black_market_data(ign)
 
         embed: discord.Embed = discord.Embed(title=f"{ign}'s Black Market")
         embed.color = 0x7c1bd1

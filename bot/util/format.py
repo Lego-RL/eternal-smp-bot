@@ -2,7 +2,7 @@
 import json
 import re
 
-from backend_data import VAULT_LANG_PATH, OTHER_PATH
+from util.lang import VAULT_LANG_PATH, OTHER_PATH
 
 
 
