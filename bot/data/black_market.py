@@ -1,6 +1,7 @@
 # Project imports
 import util.format as format
 import util.nbt as nbt
+import util.uuid as uuid
 
 # Other imports
 from sys import platform
