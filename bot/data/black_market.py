@@ -8,6 +8,7 @@ from sys import platform
 import os
 
 
+uuid.get_uuid_username_dict
 
 # Initiate files relating to bounties
 FILE_DATA = ""
@@ -17,6 +18,7 @@ if platform != "win32":
 
 else:
     FILE_DATA = os.path.join("local", "dats", "the_vault_PlayerBlackMarket.dat")
+
 
 
 
@@ -30,8 +32,8 @@ def get_black_market_player_order() -> list:
     uuid_dict: dict = uuid.get_uuid_username_dict()
     player_order: list = []
 
-    for uuid in file["data"]["playerList"].value:
-        player_order.append(uuid_dict[uuid.value])
+    for player_uuid in file["data"]["playerList"].value:
+        player_order.append(uuid_dict[player_uuid.value])
 
     return player_order
 
