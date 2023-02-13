@@ -71,3 +71,22 @@ def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> EmbedWit
 
     embed_obj: EmbedWithImage = EmbedWithImage(embed, head_render)
     return embed_obj
+
+
+def get_online_embed(players: list) -> discord.Embed:
+    """
+    Returns an embed that lists all players
+    currently online.
+    """
+
+    embed: discord.Embed = discord.Embed(title="Players online")
+    embed.color = 0x7c1bd1
+
+    if not players:
+        embed.description = "There are currently no players online!"
+    else:
+        embed.description = "\n".join(players)
+    
+
+    return embed
+

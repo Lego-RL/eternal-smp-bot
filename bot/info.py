@@ -1,3 +1,10 @@
+# Project imports
+
+from armory import get_config_dict, write_to_config_file
+from embeds import get_online_embed
+
+# Other imports
+
 import discord
 from discord import ApplicationContext
 
@@ -7,7 +14,7 @@ from discord.ext import commands, tasks
 import json
 import requests
 
-from armory import get_config_dict, write_to_config_file
+
 
 
 def get_players_online() -> list:
@@ -89,13 +96,9 @@ class Info(commands.Cog):
         """
 
         players: list = get_players_online()
+        embed: discord.Embed = get_online_embed(players)
 
-        if not players:
-            await ctx.respond("There are currently no players online!")
-
-        else:
-            response_str: str = "**Players currently online**:" + "\n"
-            await ctx.respond(response_str + "\n".join(players))
+        await ctx.respond(embed=embed)
 
     @slash_command(name="alias")
     async def set_alias(self, ctx: ApplicationContext, ign: str):
