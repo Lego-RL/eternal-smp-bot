@@ -367,45 +367,6 @@ class Armory(commands.Cog):
         else:
             await ctx.respond(embed=embed_obj.embed)
 
-    # PLAYER AGNOSTIC SLASH COMMANDS
-
-    @slash_command(name="in-vault")
-    async def invault(self, ctx: ApplicationContext):
-        """
-        Respond with a list of players currently in a vault.
-        """
-
-        snapshots: list[dict] = get_player_snapshots()
-        players_in_vault: list[str] = []
-
-        for snapshot in snapshots:
-            if snapshot["inVault"]:
-                players_in_vault.append(snapshot["playerNickname"])
-
-        if players_in_vault:
-            await ctx.respond("Players currently in vault:\n" + "\n".join(players_in_vault))
-
-        else:
-            await ctx.respond("There are currently no players in a vault!")
-
-
-        
-    # async def cog_command_error(self, ctx: ApplicationContext, error: commands.CommandError):
-    #     """
-    #     Handle specific errors that arise in this cog.
-    #     """
-
-    #     # atm only custom decorator @has_alias_set() sets this off as intended
-    #     if isinstance(error, discord.errors.CheckFailure):
-    #         await ctx.respond("Please set your Minecraft username alias with `/alias` to use this command!")
-    #     else:
-    #         raise error  
-
-
-
-# if __name__ == "__main__":
-#     result = choose_correct_ign(None, mc_username="Drlegoman")
-
 
 def setup(bot: discord.Bot) -> None:
     bot.add_cog(Armory(bot))

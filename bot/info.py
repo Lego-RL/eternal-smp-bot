@@ -1,7 +1,9 @@
 # Project imports
 
 from armory import get_config_dict, write_to_config_file
-from embeds import get_online_embed
+from backend_data import get_player_snapshots
+from embeds import PlayerListOptions, get_players_embed
+
 
 # Other imports
 
@@ -45,6 +47,22 @@ def get_players_online() -> list:
     players = [player[:-7] if "(vault)" in player else player for player in players]
 
     return players
+
+
+def get_players_invault() -> list:
+    """
+    Return a list of names of players
+    currently in vault.
+    """
+
+    snapshots: list[dict] = get_player_snapshots()
+    players_in_vault: list[str] = []
+
+    for snapshot in snapshots:
+        if snapshot["inVault"]:
+            players_in_vault.append(snapshot["playerNickname"])
+
+    return players_in_vault
 
 
 class Info(commands.Cog):
@@ -95,10 +113,23 @@ class Info(commands.Cog):
         Display what users are currently online.
         """
 
-        players: list = get_players_online()
-        embed: discord.Embed = get_online_embed(players)
+        players_online: list = get_players_online()
+        embed: discord.Embed = get_players_embed(PlayerListOptions.ONLINE, players_online)
 
         await ctx.respond(embed=embed)
+
+
+    @slash_command(name="in-vault")
+    async def invault(self, ctx: ApplicationContext):
+        """
+        Respond with a list of players currently in a vault.
+        """
+
+        players_invault: list[str] = get_players_invault()
+        embed: discord.Embed = get_players_embed(PlayerListOptions.IN_VAULT, players_invault)
+
+        await ctx.respond(embed=embed)
+
 
     @slash_command(name="alias")
     async def set_alias(self, ctx: ApplicationContext, ign: str):

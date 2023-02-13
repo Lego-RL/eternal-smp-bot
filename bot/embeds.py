@@ -3,7 +3,14 @@ from image import EmbedWithImage, get_player_head_file_ign
 
 # Other imports
 import discord
+from enum import Enum
 from typing import Union
+
+
+class PlayerListOptions(Enum):
+    ONLINE = 1
+    IN_VAULT = 2
+
 
 def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> EmbedWithImage:
     """
@@ -73,17 +80,26 @@ def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> EmbedWit
     return embed_obj
 
 
-def get_online_embed(players: list) -> discord.Embed:
+def get_players_embed(list_option: PlayerListOptions, players: list) -> discord.Embed:
     """
     Returns an embed that lists all players
-    currently online.
+    currently representing given metric
+    (i.e. online, in a vault).
     """
 
-    embed: discord.Embed = discord.Embed(title="Players online")
+    if list_option == PlayerListOptions.ONLINE:
+        title: str = "Players online"
+        empty_description: str = "There are currently no players online!"
+
+    elif list_option == PlayerListOptions.IN_VAULT:
+        title: str = "Players in vault"
+        empty_description: str = "There are currently no players in a vault!"
+
+    embed: discord.Embed = discord.Embed(title=title)
     embed.color = 0x7c1bd1
 
     if not players:
-        embed.description = "There are currently no players online!"
+        embed.description = empty_description
     else:
         embed.description = "\n".join(players)
     
