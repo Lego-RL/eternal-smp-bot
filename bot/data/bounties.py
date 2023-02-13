@@ -1,40 +1,31 @@
 # Project imports
-import util.uuid as uuid
 import util.format as format
+import util.nbt as nbt
+import util.uuid as uuid
 from main import TESTING
 
 # Other imports
 import os
 from sys import platform
-import python_nbt.nbt as nbt
 import json
 
 
 
 # Initiate files relating to bounties
-files = {
-    "data": "",
-    "lang": ""
-}
+FILE_DATA = ""
+FILE_LANG = ""
 
 if platform != "win32":
-    files["data"] = os.path.join("world", "data", "the_vault_Bounties.dat")
+    FILE_DATA = os.path.join("world", "data", "the_vault_Bounties.dat")
     if TESTING == False:
-        files["lang"] = os.path.join("eternal-smp-bot", "lang", "bounties.json")
+        FILE_LANG = os.path.join("eternal-smp-bot", "lang", "bounties.json")
     else:
-        files["lang"] = os.path.join("test-eternal-smp-bot", "lang", "bounties.json")
+        FILE_LANG = os.path.join("test-eternal-smp-bot", "lang", "bounties.json")
 
 else:
-    files["data"] = os.path.join("local", "dats", "the_vault_Bounties.dat")
-    files["lang"] = os.path.join("lang", "bounties.json")
+    FILE_DATA = os.path.join("local", "dats", "the_vault_Bounties.dat")
+    FILE_LANG = os.path.join("lang", "bounties.json")
 
-
-
-def get_file(requested_file: str = None) -> str:
-    """
-    Return the path of a requested file
-    """
-    return files[requested_file]
 
 
 def get_bounty_player_order() -> list:
@@ -43,7 +34,7 @@ def get_bounty_player_order() -> list:
     match with proper bounty data
     """
 
-    file = nbt.read_from_nbt_file(get_file("data"))
+    file = nbt.read_nbt(FILE_DATA)
 
     uuid_dict: dict = uuid.get_uuid_username_dict()
     player_order: list = []
@@ -75,7 +66,7 @@ def get_player_bounty_data(ign: str):
     """
 
     # Retrieve bounty file
-    bounties_file = nbt.read_from_nbt_file(get_file("data"))
+    bounties_file = nbt.read_nbt(FILE_DATA)
 
     # Retrieve player UUID
     playerUUID = uuid.get_uuid_from_ign(ign)
@@ -106,7 +97,7 @@ def get_player_bounty_data(ign: str):
             bounty_task_amount: int = round(bounty_task_details['amount'].value) #type: ignore
             bounty_task_id: str
 
-            with open(get_file("lang"), "r") as f:
+            with open(FILE_LANG, "r") as f:
                 
                 # Retrieve bounties.json data
                 bounties_lang: dict = json.load(f)
@@ -115,18 +106,14 @@ def get_player_bounty_data(ign: str):
                 bounty_task_id = bounty_task_details[bounties_lang["tasks"][bounty_task_type]["taskId"]].value #type: ignore
             
             # Pre-format ids
-            # bounty_task_id_prefix = "item."
-            # if bounty_task_id in ["the_vault:vault_bronze", "the_vault:vault_silver", "the_vault:vault_gold"]:
-            #     bounty_task_id_prefix = "block."
-            # bounty_task_id = bounty_task_id_prefix + bounty_task_id.replace(":", ".") #type: ignore
-            bounty_task_id = bounty_task_id.replace(":", ".")
+            bounty_task_id = format.preformat_id(bounty_task_id)
 
             # Format ids
             bounty_task_id = format.format_id(
                 bounty_task_id,
                 [
                     {
-                        "file_path": get_file("lang"),
+                        "file_path": FILE_LANG,
                         "id_path": f"tasks.{bounty_task_type}.ids"
                     }
                 ]
@@ -135,7 +122,7 @@ def get_player_bounty_data(ign: str):
                 bounty_task_type,
                 [
                     {
-                        "file_path": get_file("lang"),
+                        "file_path": FILE_LANG,
                         "id_path": "tasks",
                         "name_path": f"tasks.{bounty_task_type}.name"
                     }
@@ -177,15 +164,9 @@ def get_player_bounty_data(ign: str):
 
                 # Initiate variables
                 bounty_reward_id = bounty_reward['id']
-            
-                # Pre-format ids
-                bounty_reward_id_prefix = "item."
-                if bounty_reward_id in ["the_vault:vault_bronze", "the_vault:vault_silver", "the_vault:vault_gold"]:
-                    bounty_reward_id_prefix = "block."
-                bounty_reward_id = bounty_reward_id_prefix + bounty_reward_id.replace(":", ".") #type: ignore
                 
                 # Format id
-                bounty_reward['id'] = format.format_id(bounty_reward_id)
+                bounty_reward['id'] = format.format_id(format.preformat_id(bounty_reward_id))
 
             # Sort bounty rewards by quantity
             bounty_rewards = sorted(bounty_rewards, key=lambda x: x["count"], reverse=True)

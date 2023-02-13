@@ -6,6 +6,13 @@ from backend_data import VAULT_LANG_PATH, OTHER_PATH
 
 
 
+def preformat_id(object_id: str) -> str:
+    """
+    Return the preformatted id of an object, replacing every ':' character with '.'
+    """
+    return object_id.replace(":", ".")
+
+
 def format_id(object_id: str, alternate_files: list = []) -> str:
     """
     Return the name of an object's id based on given paths
