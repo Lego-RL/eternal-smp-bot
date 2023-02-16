@@ -1,3 +1,12 @@
+# Project imports
+import data.bounties as bounties
+from data.snapshots import get_player_snapshots
+from data.black_market import get_player_black_market_data
+from data.bounties import get_player_bounty_data
+from embeds import get_bounty_embed
+from image import EmbedWithImage
+
+# Other imports
 import discord
 from discord import ApplicationContext
 
@@ -7,13 +16,6 @@ from discord.ext import commands, tasks
 import json
 import os
 from sys import platform
-
-import data.bounties as bounties
-
-from data.snapshots import get_player_snapshots
-from data.black_market import get_player_black_market_data
-from data.bounties import get_player_bounty_data
-from embeds import get_bounty_embed
 
 TESTING = os.getenv("TESTING")
 
@@ -196,6 +198,10 @@ class Armory(commands.Cog):
                         # if bounty, matched on rewards list, is one of the bounties previously stored
                         if any(bounty == stored_bounty for stored_bounty in stored_bounty_rewards_lists):
                             continue
+
+                        # if user has already accepted or completed bounty, no need to alert them for it
+                        elif current_bounty_data[i]["availability"] != "available":
+                            continue
                         
                         # bounty doesn't match previously stored ones so it's new
                         else:
@@ -204,15 +210,26 @@ class Armory(commands.Cog):
                     # update player bounty data so new bounty is no longer seen as new
                     self.player_bounties[player_discord_id] = get_player_bounty_data(mc_user)
 
+                    # if some bounty was different but none had different rewards, aka there
+                    # are no bounties in the new_bounties list, then no need to alert
+                    if not new_bounties:
+                        return
+
                     # inform user of their new bounty/bounties
                     title: str = f"{mc_user}'s New Bounty" if len(new_bounties) == 1 else f"{mc_user}'s New Bounties"
-                    embed: discord.Embed = get_bounty_embed(title, new_bounties, mc_user) #problematic
+                    embed_obj: EmbedWithImage = get_bounty_embed(title, new_bounties, mc_user) #problematic
 
                     if config[player_discord_id]["bounty_alert_pings"]:
                         player_discord: discord.User = await self.bot.fetch_user(int(player_discord_id)) #type: ignore
-                        await self.bounty_alert_channel.send(player_discord.mention, embed=embed)
+                        if embed_obj.image_file:
+                            await self.bounty_alert_channel.send(player_discord.mention, file=embed_obj.image_file, embed=embed_obj.embed)
+                        else:
+                            await self.bounty_alert_channel.send(player_discord.mention, embed=embed_obj.embed)
                     else:
-                        await self.bounty_alert_channel.send(embed=embed)
+                        if embed_obj.image_file:
+                            await self.bounty_alert_channel.send(file=embed_obj.image_file, embed=embed_obj.embed)
+                        else:
+                            await self.bounty_alert_channel.send(embed=embed_obj.embed)
 
 
 
@@ -352,48 +369,13 @@ class Armory(commands.Cog):
 
         player_bounty_data: list = bounties.get_player_bounty_data(ign) #type: ignore
 
-        embed: discord.Embed = get_bounty_embed(f"{ign}'s Bounties", player_bounty_data, ign)
+        embed_obj: EmbedWithImage = get_bounty_embed(f"{ign}'s Bounties", player_bounty_data, ign)
 
-        await ctx.respond(embed=embed)
-
-    # PLAYER AGNOSTIC SLASH COMMANDS
-
-    @slash_command(name="in-vault")
-    async def invault(self, ctx: ApplicationContext):
-        """
-        Respond with a list of players currently in a vault.
-        """
-
-        snapshots: list[dict] = get_player_snapshots()
-        players_in_vault: list[str] = []
-
-        for snapshot in snapshots:
-            if snapshot["inVault"]:
-                players_in_vault.append(snapshot["playerNickname"])
-
-        if players_in_vault:
-            await ctx.respond("Players currently in vault:\n" + "\n".join(players_in_vault))
+        if embed_obj.image_file:
+            await ctx.respond(file=embed_obj.image_file, embed=embed_obj.embed)
 
         else:
-            await ctx.respond("There are currently no players in a vault!")
-
-
-        
-    # async def cog_command_error(self, ctx: ApplicationContext, error: commands.CommandError):
-    #     """
-    #     Handle specific errors that arise in this cog.
-    #     """
-
-    #     # atm only custom decorator @has_alias_set() sets this off as intended
-    #     if isinstance(error, discord.errors.CheckFailure):
-    #         await ctx.respond("Please set your Minecraft username alias with `/alias` to use this command!")
-    #     else:
-    #         raise error  
-
-
-
-# if __name__ == "__main__":
-#     result = choose_correct_ign(None, mc_username="Drlegoman")
+            await ctx.respond(embed=embed_obj.embed)
 
 
 def setup(bot: discord.Bot) -> None:

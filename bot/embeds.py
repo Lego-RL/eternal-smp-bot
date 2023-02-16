@@ -1,6 +1,18 @@
-import discord
+# Project Imports
+from image import EmbedWithImage, get_player_head_file_ign
 
-def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> discord.Embed:
+# Other imports
+import discord
+from enum import Enum
+from typing import Union
+
+
+class PlayerListOptions(Enum):
+    ONLINE = 1
+    IN_VAULT = 2
+
+
+def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> EmbedWithImage:
     """
     Return an embed with given title and data on
     bounties in given bounty list.
@@ -8,6 +20,10 @@ def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> discord.
 
     embed: discord.Embed = discord.Embed(title=title)
     embed.color = 0x7c1bd1
+
+    head_render: Union[discord.File, None] = get_player_head_file_ign(ign)
+    if head_render:
+        embed.set_thumbnail(url="attachment://image.png")
 
     availability_set: set = set()
 
@@ -22,7 +38,6 @@ def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> discord.
     availability_order: list = ["active", "available", "complete"]
     availability_order = [x for x in availability_order if x in availability_set]
 
-    index: int = 0
     for availability in availability_order:
         relevant_bounties: list = [bounty for bounty in player_bounty_data if bounty["availability"] == availability]
 
@@ -53,11 +68,41 @@ def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> discord.
 
                 field_str += f"\n\nRefreshes in <t:{expiry_timestamp}:f>"
 
-            if index < len(relevant_bounties)-1:
-                field_str += "\n‎\n"
+            # add newlines + invisible character after every bounty
+            # then delete final newlines/invis character afterward
+            field_str += "\n‎\n"
 
-            index += 1
-
+        if field_str:
+            field_str = field_str[:-3]
         embed.add_field(name=f"{availability}".title(), value=field_str, inline=False)
 
+    embed_obj: EmbedWithImage = EmbedWithImage(embed, head_render)
+    return embed_obj
+
+
+def get_players_embed(list_option: PlayerListOptions, players: list) -> discord.Embed:
+    """
+    Returns an embed that lists all players
+    currently representing given metric
+    (i.e. online, in a vault).
+    """
+
+    if list_option == PlayerListOptions.ONLINE:
+        title: str = "Players online"
+        empty_description: str = "There are currently no players online!"
+
+    elif list_option == PlayerListOptions.IN_VAULT:
+        title: str = "Players in vault"
+        empty_description: str = "There are currently no players in a vault!"
+
+    embed: discord.Embed = discord.Embed(title=title)
+    embed.color = 0x7c1bd1
+
+    if not players:
+        embed.description = empty_description
+    else:
+        embed.description = "\n".join(players)
+    
+
     return embed
+
