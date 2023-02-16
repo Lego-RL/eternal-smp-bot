@@ -1,5 +1,5 @@
 # Project imports
-from backend_data import get_uuid_from_ign
+from util.uuid import get_uuid_from_ign
 
 # Other Imports
 import discord

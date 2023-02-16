@@ -1,7 +1,7 @@
 # Project imports
 
 from armory import get_config_dict, write_to_config_file
-from backend_data import get_player_snapshots
+from data.snapshots import get_player_snapshots
 from embeds import PlayerListOptions, get_players_embed
 
 

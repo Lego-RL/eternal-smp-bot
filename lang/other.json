@@ -1,0 +1,15 @@
+{
+    "item.minecraft.diamond": "Diamond",
+    "item.minecraft.elytra": "Elytra",
+    "item.minecraft.netherite_ingot": "Netherite Ingot",
+    "item.minecraft.shulker_shell": "Shulker Shell",
+    "item.quark.soul_bead": "Soul Bead",
+
+    "entity.minecraft.drowned": "Drowned",
+    "entity.minecraft.husk": "Husk",
+    "entity.minecraft.piglin": "Piglin",
+    "entity.minecraft.skeleton": "Skeleton",
+    "entity.minecraft.stray": "Stray",
+    "entity.minecraft.zombie": "Zombie",
+    "entity.quark.wraith": "Wraith"
+}

@@ -1,5 +1,8 @@
 # Project imports
-from backend_data import get_player_snapshots, get_player_bm_data, get_player_bounty_data
+import data.bounties as bounties
+from data.snapshots import get_player_snapshots
+from data.black_market import get_player_black_market_data
+from data.bounties import get_player_bounty_data
 from embeds import get_bounty_embed
 from image import EmbedWithImage
 
@@ -14,6 +17,7 @@ import json
 import os
 from sys import platform
 
+TESTING = os.getenv("TESTING")
 
 def has_alias_set():
     """
@@ -47,7 +51,10 @@ def get_config_dict() -> dict:
     """
 
     if platform != "win32":
-        path: str = os.path.join("eternal-smp-bot", "bot", "config.json")
+        if TESTING == False:
+            path: str = os.path.join("eternal-smp-bot", "bot", "config.json")
+        else:
+            path: str = os.path.join("test-eternal-smp-bot", "bot", "config.json")
 
     else:
         path: str = os.path.join("bot", "config.json")
@@ -76,7 +83,10 @@ def write_to_config_file(data: dict) -> None:
     """
 
     if platform != "win32":
-        path: str = os.path.join("eternal-smp-bot", "bot", "config.json")
+        if TESTING == False:
+            path: str = os.path.join("eternal-smp-bot", "bot", "config.json")
+        else:
+            path: str = os.path.join("test-eternal-smp-bot", "bot", "config.json")
 
     else:
         path: str = os.path.join("bot", "config.json")
@@ -156,7 +166,7 @@ class Armory(commands.Cog):
         if not self.player_bounties:
             for player_discord_id in config:
                 mc_user: str = config[player_discord_id]["alias"]
-                self.player_bounties[player_discord_id] = get_player_bounty_data(mc_user)
+                self.player_bounties[player_discord_id] = bounties.get_player_bounty_data(mc_user)
 
             # print(f"now {self.player_bounties=}")
             return
@@ -166,12 +176,12 @@ class Armory(commands.Cog):
 
             # if user bounties not initialized, as they just opted in to alerts, initialize & move on to next user
             if player_discord_id not in self.player_bounties:
-                self.player_bounties[player_discord_id] = get_player_bounty_data(mc_user)
+                self.player_bounties[player_discord_id] = bounties.get_player_bounty_data(mc_user)
                 continue
 
             # if user has alerts on
             if config[player_discord_id]["bounty_alerts"]:
-                current_bounty_data: list = get_player_bounty_data(mc_user) #type: ignore
+                current_bounty_data: list = bounties.get_player_bounty_data(mc_user) #type: ignore
                 # if no bounty data on player, skip them
                 if not current_bounty_data:
                     break
@@ -321,7 +331,7 @@ class Armory(commands.Cog):
 
         ign: str = result_str
 
-        player_bm_data: dict = get_player_bm_data(ign)
+        player_bm_data: dict = get_player_black_market_data(ign)
 
         embed: discord.Embed = discord.Embed(title=f"{ign}'s Black Market")
         embed.color = 0x7c1bd1
@@ -357,7 +367,7 @@ class Armory(commands.Cog):
 
         ign: str = result_str
 
-        player_bounty_data: list = get_player_bounty_data(ign) #type: ignore
+        player_bounty_data: list = bounties.get_player_bounty_data(ign) #type: ignore
 
         embed_obj: EmbedWithImage = get_bounty_embed(f"{ign}'s Bounties", player_bounty_data, ign)
 
