@@ -79,7 +79,11 @@ def get_player_bounty_data(ign: str):
     bounty_list: list = []
 
     # Loop through bounty availabilities
-    for bounty_availability in ["active", "available", "complete"]:
+    for bounty_availability in ["legendary", "active", "available", "complete"]:
+
+        # Check if bounty availability exists
+        if bounties_file['data'][bounty_availability] is None:
+            continue
 
         # Loop through bounties
         for bounty in bounties_file['data'][bounty_availability][playerUUID].value: #type: ignore
