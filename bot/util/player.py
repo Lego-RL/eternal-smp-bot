@@ -1,15 +1,15 @@
 # Project imports
 import data.snapshots as snapshots
 
-def get_uuid_from_ign(ign: str):
+def get_uuid_from_username(username: str):
     """
-    Return user's UUID given their ign
+    Return user's UUID given their username
     """
 
     player_uuid_dict: dict = get_uuid_username_dict()
 
     for key, value in player_uuid_dict.items():
-        if value == ign:
+        if value == username:
             return key
 
 

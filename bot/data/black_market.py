@@ -1,14 +1,12 @@
 # Project imports
 import util.format as format
 import util.nbt as nbt
-import util.uuid as uuid
+import util.player as player
 
 # Other imports
 from sys import platform
 import os
 
-
-uuid.get_uuid_username_dict
 
 # Initiate files relating to bounties
 FILE_DATA = ""
@@ -29,7 +27,7 @@ def get_black_market_player_order() -> list:
 
     file = nbt.read_nbt(FILE_DATA)
 
-    uuid_dict: dict = uuid.get_uuid_username_dict()
+    uuid_dict: dict = player.get_uuid_username_dict()
     player_order: list = []
 
     for player_uuid in file["data"]["playerList"].value:
