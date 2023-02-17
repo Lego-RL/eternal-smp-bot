@@ -1,7 +1,7 @@
 # Project imports
 import util.format as format
 import util.nbt as nbt
-import util.uuid as uuid
+import util.player as player
 from main import TESTING
 
 # Other imports
@@ -36,7 +36,7 @@ def get_bounty_player_order() -> list:
 
     file = nbt.read_nbt(FILE_DATA)
 
-    uuid_dict: dict = uuid.get_uuid_username_dict()
+    uuid_dict: dict = player.get_uuid_username_dict()
     player_order: list = []
 
     for player_uuid in file["data"]["active"].value:
@@ -60,7 +60,7 @@ def get_all_bounty_data() -> dict:
     return bounty_data
 
 
-def get_player_bounty_data(ign: str):
+def get_player_bounty_data(username: str):
     """
     Return the bounty data for an individual player
     """
@@ -69,7 +69,7 @@ def get_player_bounty_data(ign: str):
     bounties_file = nbt.read_nbt(FILE_DATA)
 
     # Retrieve player UUID
-    playerUUID = uuid.get_uuid_from_ign(ign)
+    playerUUID = player.get_uuid_from_username(username)
 
     # Guard clause
     if not playerUUID:

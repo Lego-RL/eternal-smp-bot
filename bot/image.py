@@ -1,5 +1,5 @@
 # Project imports
-from util.uuid import get_uuid_from_ign
+import util.player as player
 
 # Other Imports
 import discord
@@ -96,13 +96,13 @@ def get_player_head_file(uuid: str) -> Union[discord.File, None]:
         return head_render
     
 
-def get_player_head_file_ign(ign: str) -> Union[discord.File, None]:
+def get_player_head_file_ign(username: str) -> Union[discord.File, None]:
     """
     Helper function to bypass the need to convert all igns to UUIDs
     wherever player head file is needed.
     """
 
-    player_uuid: Union[str, None] = get_uuid_from_ign(ign)
+    player_uuid: Union[str, None] = player.get_uuid_from_ign(username)
 
     if player_uuid:
         return get_player_head_file(player_uuid)
