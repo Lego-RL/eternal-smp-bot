@@ -43,8 +43,8 @@ def get_crafted_modifiers_data() -> dict:
     for entry in nbt_data["data"]["crafts"].value:
 
         # Initiate variables
-        player_crafted_modifiers = entry['itemCrafts']
-        player_uuid = entry['player']
+        player_crafted_modifiers = entry['itemCrafts'].value
+        player_uuid = entry['player'].value
 
         # Add data to dictionary
         crafted_modifiers_data[player_uuid] = player_crafted_modifiers
@@ -72,7 +72,7 @@ def get_crafted_modifiers(username: str):
     crafted_modifiers: list = []
 
     # Add data to crafted modifiers list
-    crafted_modifiers.append(get_crafted_modifiers_data().get(player_uuid))
+    crafted_modifiers.append(get_crafted_modifiers_data[player_uuid])
 
     # Return data
     return crafted_modifiers
