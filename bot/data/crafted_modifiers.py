@@ -47,7 +47,7 @@ def get_crafted_modifiers_data() -> dict:
         player_uuid = entry['player']
 
         # Add data to dictionary
-        crafted_modifiers_data.put(player_uuid, player_crafted_modifiers)
+        crafted_modifiers_data[player_uuid] = player_crafted_modifiers
 
     # Return data
     return crafted_modifiers_data
