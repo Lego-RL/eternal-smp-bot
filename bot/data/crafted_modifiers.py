@@ -1,4 +1,6 @@
 # Project imports
+import util.config as config
+import util.converter as converter
 import util.format as format
 import util.nbt as nbt
 import util.player as player
@@ -11,43 +13,48 @@ import json
 
 
 
-# Initiate files relating to bounties
+# Initiate files relating to crafted modifiers
 FILE_DATA = ""
 FILE_LANG = ""
 
 if platform != "win32":
     FILE_DATA = os.path.join("world", "data", "the_vault_DiscoveredWorkbenchModifiers.dat")
     if TESTING == False:
-        FILE_LANG = os.path.join("eternal-smp-bot", "lang", "bounties.json")
+        FILE_LANG = os.path.join("eternal-smp-bot", "lang", "crafted_modifiers.json")
     else:
-        FILE_LANG = os.path.join("test-eternal-smp-bot", "lang", "bounties.json")
+        FILE_LANG = os.path.join("test-eternal-smp-bot", "lang", "crafted_modifiers.json")
 
 else:
     FILE_DATA = os.path.join("local", "dats", "the_vault_DiscoveredWorkbenchModifiers.dat")
-    FILE_LANG = os.path.join("lang", "bounties.json")
+    FILE_LANG = os.path.join("lang", "crafted_modifiers.json")
 
 
 
 def get_crafted_modifiers_data() -> dict:
     """
-    Returns a dictionary of player names, with corresponding crafted modifiers 
+    Returns a dictionary of player names, with the corresponding discovered crafted modifiers 
     """
 
     # Retrieve nbt data
     nbt_data = nbt.read_nbt(FILE_DATA)
 
     # Initiate variables
-    crafted_modifiers_data: dict = []
+    crafted_modifiers_data: dict = {}
 
     # Loop through entries
     for entry in nbt_data["data"]["crafts"].value:
 
         # Initiate variables
-        player_crafted_modifiers = entry[0]
-        player_uuid = entry[1]
+        player_crafted_modifiers = entry['itemCrafts'].value
+        player_uuid = entry['player'].value
+
+        player_uuid_hex = ''
+
+        for i in player_uuid:
+           player_uuid_hex += f'{converter.tohex(i, 32).lstrip("0x")}'
 
         # Add data to dictionary
-        crafted_modifiers_data.put(player_uuid, player_crafted_modifiers)
+        crafted_modifiers_data[player_uuid_hex] = player_crafted_modifiers
 
     # Return data
     return crafted_modifiers_data
@@ -55,7 +62,7 @@ def get_crafted_modifiers_data() -> dict:
 
 def get_crafted_modifiers(username: str):
     """
-    Return the bounty data for a player
+    Returns the discovered crafted modifiers for a player
     """
 
     # Retrieve nbt data
@@ -68,11 +75,51 @@ def get_crafted_modifiers(username: str):
     if not player_uuid:
         return None
 
-    # Initiate crafted modifiers list
-    crafted_modifiers: list = []
+    # Initiate crafted modifiers dictionary
+    crafted_modifiers: dict = {}
 
-    # Add data to crafted modifiers list
-    crafted_modifiers.append(get_crafted_modifiers_data().get(player_uuid))
+    # Retrieve available crafted modifiers
+    crafted_modifiers_data = get_crafted_modifiers_data().get(player_uuid.replace('-', ''))
+
+    # Loop through vault gear pieces
+    for vault_gear in crafted_modifiers_data:
+
+        # Initiate variables
+        vault_gear_crafted_modifiers = []
+
+        # Loop through crafted modifiers
+        for crafted_modifier in crafted_modifiers_data.get(vault_gear).value:
+
+            # Initiate variables
+            crafted_modifier_id = crafted_modifier.value[:crafted_modifier.value.rfind('_')]
+            crafted_modifier_tier = int(crafted_modifier.value[crafted_modifier.value.rfind('_') + 1:].replace('t', '')) + 1
+
+            # Format variables
+            crafted_modifier_id = format.format_id(
+                crafted_modifier_id,
+                [
+                    {
+                        "file_path": FILE_LANG,
+                        "id_path": "crafted_modifiers"
+                    }
+                ]
+            )
+
+            # Initiate crafted modifier data
+            crafted_modifier_data: dict = {
+                'id': crafted_modifier_id,
+                'tier': crafted_modifier_tier
+            }
+
+            # Add crafted modifier data to list
+            vault_gear_crafted_modifiers.append(crafted_modifier_data)
+
+        # Format vault gear
+        vault_gear = format.format_id(format.preformat_id(vault_gear))
+
+        # Add vault gear piece to dictionary
+        crafted_modifiers[vault_gear] = vault_gear_crafted_modifiers
+        
 
     # Return data
     return crafted_modifiers

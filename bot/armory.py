@@ -400,10 +400,26 @@ class Armory(commands.Cog):
 
         player_crafted_modifiers: list = crafted_modifiers.get_crafted_modifiers(ign) #type: ignore
 
-        embed: discord.Embed = discord.Embed(title=f"{ign}'s Crafted Modifiers")
+        embed: discord.Embed = discord.Embed(title=f'{ign}\'s Crafted Modifiers')
         embed.color = 0x7c1bd1
 
-        embed.add_field(name=f"Crafted Modifiers", value=f"{player_crafted_modifiers}", inline=False)
+        # Loop through vault gear pieces
+        for vault_gear in player_crafted_modifiers:
+
+            # Initiate field string
+            field_string = ''
+            
+            # Loop through vault gear crafted modifiers
+            for crafted_modifier in player_crafted_modifiers[vault_gear]:
+
+                # Add modifier to field string
+                field_string += f'{crafted_modifier["id"]}: Tier {crafted_modifier["tier"]}'
+
+                # Add empty line after every modifier
+                field_string += f'\n'
+            
+            # Add field
+            embed.add_field(name=f'{vault_gear}', value=f"{field_string}", inline=False)
 
         await ctx.respond(embed=embed)
 
