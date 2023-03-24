@@ -49,13 +49,13 @@ def get_crafted_modifiers_data() -> dict:
         player_uuid_hex = ''
 
         for i in player_uuid:
-            player_uuid_hex += f'{hex(i).replace("0x", "")}'
+            player_uuid_hex += f'{int.from_bytes(bytes.fromhex(hex(i)[2:]), byteorder="big", signed=True)}'
 
         print(player_uuid)
         print(player_uuid_hex)
 
         # Add data to dictionary
-        crafted_modifiers_data[player_uuid] = player_crafted_modifiers
+        crafted_modifiers_data[player_uuid_hex] = player_crafted_modifiers
 
     # Return data
     return crafted_modifiers_data
