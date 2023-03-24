@@ -1,4 +1,5 @@
 # Project imports
+import util.config as config
 import util.converter as converter
 import util.format as format
 import util.nbt as nbt
@@ -12,7 +13,7 @@ import json
 
 
 
-# Initiate files relating to bounties
+# Initiate files relating to crafted modifiers
 FILE_DATA = ""
 FILE_LANG = ""
 
@@ -31,7 +32,7 @@ else:
 
 def get_crafted_modifiers_data() -> dict:
     """
-    Returns a dictionary of player names, with corresponding crafted modifiers 
+    Returns a dictionary of player names, with the corresponding discovered crafted modifiers 
     """
 
     # Retrieve nbt data
@@ -63,7 +64,7 @@ def get_crafted_modifiers_data() -> dict:
 
 def get_crafted_modifiers(username: str):
     """
-    Return the bounty data for a player
+    Returns the discovered crafted modifiers for a player
     """
 
     # Retrieve nbt data
@@ -76,11 +77,37 @@ def get_crafted_modifiers(username: str):
     if not player_uuid:
         return None
 
-    # Initiate crafted modifiers list
-    crafted_modifiers: list = []
+    # Initiate crafted modifiers dictionary
+    crafted_modifiers: dict = {}
 
-    # Add data to crafted modifiers list
-    crafted_modifiers.append(get_crafted_modifiers_data().get(player_uuid.replace('-', '')))
+    # Retrieve available crafted modifiers
+    crafted_modifiers_data = get_crafted_modifiers_data().get(player_uuid.replace('-', ''))
+
+    # Loop through vault gear pieces
+    for vault_gear in crafted_modifiers_data:
+
+        # Initiate variables
+        vault_gear_crafted_modifiers = []
+
+        # Loop through crafted modifiers
+        for crafted_modifier in crafted_modifiers_data.get(vault_gear):
+
+            # Initiate variables
+            crafted_modifier_id = crafted_modifier[:crafted_modifier.rfind('_')]
+            crafted_modifier_tier = crafted_modifier[crafted_modifier.rfind('_') + 1:]
+
+            # Initiate crafted modifier data
+            crafted_modifier_data: dict = {
+                'id': crafted_modifier_id,
+                'tier': crafted_modifier_tier
+            }
+
+            # Add crafted modifier data to list
+            vault_gear_crafted_modifiers.append(crafted_modifier_data)
+
+        # Add vault gear piece to dictionary
+        crafted_modifiers[vault_gear] = vault_gear_crafted_modifiers
+        
 
     # Return data
     return crafted_modifiers
