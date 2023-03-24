@@ -83,7 +83,7 @@ def get_crafted_modifiers(username: str):
     crafted_modifiers.append(get_crafted_modifiers_data().get(player_uuid.replace('-', '')))
 
     # Return data
-    return get_crafted_modifiers_data().get(player_uuid)
+    return crafted_modifiers
 
 
     # # Loop through bounty availabilities
