@@ -95,7 +95,15 @@ def get_crafted_modifiers(username: str):
             crafted_modifier_tier = int(crafted_modifier.value[crafted_modifier.value.rfind('_') + 1:].replace('t', '')) + 1
 
             # Format variables
-            crafted_modifier_id = format.format_id(crafted_modifier_id, FILE_LANG)
+            crafted_modifier_id = format.format_id(
+                crafted_modifier_id,
+                [
+                    {
+                        "file_path": FILE_LANG,
+                        "id_path": ""
+                    }
+                ]
+            )
 
             # Initiate crafted modifier data
             crafted_modifier_data: dict = {
