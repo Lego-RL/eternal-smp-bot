@@ -20,13 +20,13 @@ FILE_LANG = ""
 if platform != "win32":
     FILE_DATA = os.path.join("world", "data", "the_vault_DiscoveredWorkbenchModifiers.dat")
     if TESTING == False:
-        FILE_LANG = os.path.join("eternal-smp-bot", "lang", "bounties.json")
+        FILE_LANG = os.path.join("eternal-smp-bot", "lang", "crafted_modifiers.json")
     else:
-        FILE_LANG = os.path.join("test-eternal-smp-bot", "lang", "bounties.json")
+        FILE_LANG = os.path.join("test-eternal-smp-bot", "lang", "crafted_modifiers.json")
 
 else:
     FILE_DATA = os.path.join("local", "dats", "the_vault_DiscoveredWorkbenchModifiers.dat")
-    FILE_LANG = os.path.join("lang", "bounties.json")
+    FILE_LANG = os.path.join("lang", "crafted_modifiers.json")
 
 
 
@@ -92,7 +92,10 @@ def get_crafted_modifiers(username: str):
 
             # Initiate variables
             crafted_modifier_id = crafted_modifier.value[:crafted_modifier.value.rfind('_')]
-            crafted_modifier_tier = crafted_modifier.value[crafted_modifier.value.rfind('_') + 1:]
+            crafted_modifier_tier = int(crafted_modifier.value[crafted_modifier.value.rfind('_') + 1:].replace('t', '')) + 1
+
+            # Format variables
+            crafted_modifier_id = format.format_id(crafted_modifier_id, FILE_LANG)
 
             # Initiate crafted modifier data
             crafted_modifier_data: dict = {
@@ -104,7 +107,7 @@ def get_crafted_modifiers(username: str):
             vault_gear_crafted_modifiers.append(crafted_modifier_data)
 
         # Add vault gear piece to dictionary
-        crafted_modifiers[vault_gear] = vault_gear_crafted_modifiers
+        crafted_modifiers[format.format_id(vault_gear)] = vault_gear_crafted_modifiers
         
 
     # Return data
