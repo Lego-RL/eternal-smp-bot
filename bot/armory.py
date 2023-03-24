@@ -406,11 +406,15 @@ class Armory(commands.Cog):
         # Loop through vault gear pieces
         for vault_gear in player_crafted_modifiers:
 
+            print(vault_gear)
+
             # Initiate field string
             field_string = ''
             
             # Loop through vault gear crafted modifiers
-            for crafted_modifier in vault_gear:
+            for crafted_modifier in player_crafted_modifiers[vault_gear]:
+                
+                print(crafted_modifier)
 
                 # Add modifier to field string
                 field_string += f'{crafted_modifier["id"]}: {crafted_modifier["tier"]}'
