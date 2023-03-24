@@ -37,7 +37,7 @@ def get_crafted_modifiers_data() -> dict:
     nbt_data = nbt.read_nbt(FILE_DATA)
 
     # Initiate variables
-    crafted_modifiers_data: dict = []
+    crafted_modifiers_data: dict = {}
 
     # Loop through entries
     for entry in nbt_data["data"]["crafts"].value:
