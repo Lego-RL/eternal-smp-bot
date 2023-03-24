@@ -143,6 +143,9 @@ def get_player_bounty_data(username: str):
             # Loop through reward items
             for bounty_reward in bounty_reward_details['items'].value: #type: ignore
 
+                # Retrieve bounty reward data
+                bounty_reward = bounty_reward['stack']
+
                 # Retrieve bounty reward variables
                 bounty_reward_id: str = bounty_reward['id'].value
                 bounty_reward_count: int = bounty_reward['Count'].value
