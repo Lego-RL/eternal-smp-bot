@@ -46,6 +46,14 @@ def get_crafted_modifiers_data() -> dict:
         player_crafted_modifiers = entry['itemCrafts'].value
         player_uuid = entry['player'].value
 
+        player_uuid_hex = ''
+
+        for i in player_uuid:
+            player_uuid_hex += f'{map(hex, player_uuid)}'
+
+        print(player_uuid)
+        print(player_uuid_hex)
+
         # Add data to dictionary
         crafted_modifiers_data[player_uuid] = player_crafted_modifiers
 
