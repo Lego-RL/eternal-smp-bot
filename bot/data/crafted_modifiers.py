@@ -115,7 +115,7 @@ def get_crafted_modifiers(username: str):
             vault_gear_crafted_modifiers.append(crafted_modifier_data)
 
         # Format vault gear
-        vault_gear = format.format_id(vault_gear)
+        vault_gear = format.format_id(format.preformat_id(vault_gear))
 
         # Add vault gear piece to dictionary
         crafted_modifiers[vault_gear] = vault_gear_crafted_modifiers
