@@ -1,4 +1,5 @@
 # Project imports
+import util.converter as converter
 import util.format as format
 import util.nbt as nbt
 import util.player as player
@@ -49,7 +50,7 @@ def get_crafted_modifiers_data() -> dict:
         player_uuid_hex = ''
 
         for i in player_uuid:
-            print(f'{int.from_bytes(bytes.fromhex(hex(i)[2:]), byteorder="big", signed=True)}')
+            print(f'{converter.tohex(i, 32).lstrip("0x")}')
 
         print(player_uuid)
         print(player_uuid_hex)
