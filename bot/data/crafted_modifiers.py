@@ -80,7 +80,7 @@ def get_crafted_modifiers(username: str):
     crafted_modifiers: list = []
 
     # Add data to crafted modifiers list
-    crafted_modifiers.append(get_crafted_modifiers_data().get(player_uuid))
+    crafted_modifiers.append(get_crafted_modifiers_data().get(player_uuid.replace('-', '')))
 
     # Return data
     return get_crafted_modifiers_data().get(player_uuid)
