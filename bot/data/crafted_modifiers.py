@@ -49,7 +49,7 @@ def get_crafted_modifiers_data() -> dict:
         player_uuid_hex = ''
 
         for i in player_uuid:
-            print(f'{bytes.fromhex(hex(hex(i))[2:])}')
+            print(f'{int.from_bytes(bytes.fromhex(hex(i)[2:]), byteorder="big", signed=True)}')
 
         print(player_uuid)
         print(player_uuid_hex)
