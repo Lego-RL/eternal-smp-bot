@@ -51,6 +51,8 @@ def get_crafted_modifiers_data() -> dict:
 
         for i in player_uuid:
            player_uuid_hex += f'{converter.tohex(i, 32).lstrip("0x")}'
+        
+        print(player_uuid_hex)
 
         # Add data to dictionary
         crafted_modifiers_data[player_uuid_hex] = player_crafted_modifiers
