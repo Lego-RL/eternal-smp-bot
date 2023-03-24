@@ -102,7 +102,7 @@ def get_player_head_file_ign(username: str) -> Union[discord.File, None]:
     wherever player head file is needed.
     """
 
-    player_uuid: Union[str, None] = player.get_uuid_from_ign(username)
+    player_uuid: Union[str, None] = player.get_uuid_from_username(username)
 
     if player_uuid:
         return get_player_head_file(player_uuid)
