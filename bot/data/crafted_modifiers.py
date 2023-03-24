@@ -49,7 +49,7 @@ def get_crafted_modifiers_data() -> dict:
         player_uuid_hex = ''
 
         for i in player_uuid:
-            player_uuid_hex += f'{map(hex, player_uuid)}'
+            player_uuid_hex += f'{hex(i).replace("0x", "")}'
 
         print(player_uuid)
         print(player_uuid_hex)
