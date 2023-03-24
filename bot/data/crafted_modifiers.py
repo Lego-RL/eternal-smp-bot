@@ -52,8 +52,6 @@ def get_crafted_modifiers_data() -> dict:
 
         for i in player_uuid:
            player_uuid_hex += f'{converter.tohex(i, 32).lstrip("0x")}'
-        
-        print(player_uuid_hex)
 
         # Add data to dictionary
         crafted_modifiers_data[player_uuid_hex] = player_crafted_modifiers
@@ -93,8 +91,8 @@ def get_crafted_modifiers(username: str):
         for crafted_modifier in crafted_modifiers_data.get(vault_gear).value:
 
             # Initiate variables
-            crafted_modifier_id = crafted_modifier.value[:crafted_modifier.rfind('_')]
-            crafted_modifier_tier = crafted_modifier.value[crafted_modifier.rfind('_') + 1:]
+            crafted_modifier_id = crafted_modifier.value[:crafted_modifier.value.rfind('_')]
+            crafted_modifier_tier = crafted_modifier.value[crafted_modifier.value.rfind('_') + 1:]
 
             # Initiate crafted modifier data
             crafted_modifier_data: dict = {
