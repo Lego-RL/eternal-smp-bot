@@ -1,19 +1,21 @@
 {
-    "the_vault:crafted_armor": "Armor",
-    "the_vault:crafted_health": "Health",
-    "the_vault:crafted_mana_additive": "Mana",
-    "the_vault:crafted_mana_additive_percentile": "Mana",
-    "the_vault:crafted_resistance": "Resistance",
-    "the_vault:crafted_damage_increase": "Increased Damage",
-    "the_vault:crafted_healing_efficiency": "Healing Efficiency",
-    "the_vault:crafted_durability": "Durability",
-    "the_vault:crafted_cooldown_reduction": "Cooldown Reduction",
-    "the_vault:crafted_soulbound": "Soulbound",
-    "the_vault:crafted_thorns_chance": "Thorns Chance",
-    "the_vault:crafted_item_quantity": "Item Quantity",
-    "the_vault:crafted_item_rarity": "Item Rarity",
-    "the_vault:crafted_trap_disarming": "Trap Disarm Chance",
-    "the_vault:crafted_knockback_resistance": "Knockback Resistance",
-    "the_vault:crafted_mana_regen": "Mana Regen",
-    "the_vault:crafted_soul_chance": "Soul Chance"
+    "crafted_modifiers": {
+        "the_vault:crafted_armor": "Armor",
+        "the_vault:crafted_health": "Health",
+        "the_vault:crafted_mana_additive": "Mana",
+        "the_vault:crafted_mana_additive_percentile": "Mana",
+        "the_vault:crafted_resistance": "Resistance",
+        "the_vault:crafted_damage_increase": "Increased Damage",
+        "the_vault:crafted_healing_efficiency": "Healing Efficiency",
+        "the_vault:crafted_durability": "Durability",
+        "the_vault:crafted_cooldown_reduction": "Cooldown Reduction",
+        "the_vault:crafted_soulbound": "Soulbound",
+        "the_vault:crafted_thorns_chance": "Thorns Chance",
+        "the_vault:crafted_item_quantity": "Item Quantity",
+        "the_vault:crafted_item_rarity": "Item Rarity",
+        "the_vault:crafted_trap_disarming": "Trap Disarm Chance",
+        "the_vault:crafted_knockback_resistance": "Knockback Resistance",
+        "the_vault:crafted_mana_regen": "Mana Regen",
+        "the_vault:crafted_soul_chance": "Soul Chance"
+    }
 }

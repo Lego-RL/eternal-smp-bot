@@ -100,7 +100,7 @@ def get_crafted_modifiers(username: str):
                 [
                     {
                         "file_path": FILE_LANG,
-                        "id_path": ""
+                        "id_path": "crafted_modifiers"
                     }
                 ]
             )
