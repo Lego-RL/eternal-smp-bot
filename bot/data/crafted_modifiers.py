@@ -90,11 +90,11 @@ def get_crafted_modifiers(username: str):
         vault_gear_crafted_modifiers = []
 
         # Loop through crafted modifiers
-        for crafted_modifier in crafted_modifiers_data.get(vault_gear):
+        for crafted_modifier in crafted_modifiers_data.get(vault_gear).value:
 
             # Initiate variables
-            crafted_modifier_id = crafted_modifier[:crafted_modifier.rfind('_')]
-            crafted_modifier_tier = crafted_modifier[crafted_modifier.rfind('_') + 1:]
+            crafted_modifier_id = crafted_modifier.value[:crafted_modifier.rfind('_')]
+            crafted_modifier_tier = crafted_modifier.value[crafted_modifier.rfind('_') + 1:]
 
             # Initiate crafted modifier data
             crafted_modifier_data: dict = {
