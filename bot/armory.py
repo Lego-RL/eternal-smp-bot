@@ -415,6 +415,9 @@ class Armory(commands.Cog):
                 # Add modifier to field string (Soulbound)
                 if 'Soulbound' in crafted_modifier['id']:
                     field_string += f'{crafted_modifier["id"]}'
+
+                elif crafted_modifier["values"][0] == crafted_modifier["values"][1]:
+                    field_string += f'{crafted_modifier["id"]}: {crafted_modifier["values"][0]}'
                 
                 # Add modifier to field string (other)
                 else:
