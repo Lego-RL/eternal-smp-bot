@@ -106,11 +106,11 @@ def get_crafted_modifiers(username: str):
                 # Loop through crafted modifier positions
                 for position in crafted_modifier_positions:
 
-                    print(gear_modifier_config['modifierGroup'])
-                    print(gear_modifier_config['modifierGroup'].keys())
+                    # Initiate variables
+                    available_crafted_modifiers = gear_modifier_config['modifierGroup'][f'CRAFTED_{position.upper()}']
 
                     # Loop through available crafted modifiers
-                    for available_crafted_modifier in gear_modifier_config['modifierGroup'][f'CRAFTED_{position.upper()}']:
+                    for available_crafted_modifier in available_crafted_modifiers:
 
                         # Guard clause
                         if available_crafted_modifier['identifier'] != crafted_modifier_id:
