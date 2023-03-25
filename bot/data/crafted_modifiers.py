@@ -123,6 +123,12 @@ def get_crafted_modifiers(username: str):
                         # Initiate variables
                         crafted_modifier_tier_data = available_crafted_modifier['tiers'][crafted_modifier_tier]
 
+                        # Guard clause
+                        if 'soulbound' in crafted_modifier_id:
+                            crafted_modifier_values.append(1)
+                            crafted_modifier_values.append(1)
+                            break
+
                         crafted_modifier_values.append(crafted_modifier_tier_data['value']['min'])
                         crafted_modifier_values.append(crafted_modifier_tier_data['value']['max'])
 
