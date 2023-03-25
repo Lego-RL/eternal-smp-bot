@@ -413,7 +413,7 @@ class Armory(commands.Cog):
             for crafted_modifier in player_crafted_modifiers[vault_gear]:
 
                 # Add modifier to field string
-                field_string += f'{crafted_modifier["id"]}: Tier {crafted_modifier["tier"]}'
+                field_string += f'{crafted_modifier["id"]}: {crafted_modifier["values"][0]} - {crafted_modifier["values"][1]}'
 
                 # Add empty line after every modifier
                 field_string += f'\n'
