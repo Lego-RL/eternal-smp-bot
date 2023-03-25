@@ -91,6 +91,10 @@ def get_crafted_modifiers(username: str):
             crafted_modifier_id = crafted_modifier.value[:crafted_modifier.value.rfind('_')]
             crafted_modifier_tier = int(crafted_modifier.value[crafted_modifier.value.rfind('_') + 1:].replace('t', ''))
 
+            # Reformat id for Cooldown Reduction
+            if 'cdr' in crafted_modifier_id:
+                crafted_modifier_id == 'the_vault:crafted_cooldown_reduction'
+
             # Initiate variables
             crafted_modifier_values = []
 
