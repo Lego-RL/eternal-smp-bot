@@ -135,7 +135,7 @@ def get_crafted_modifiers(username: str):
                         # Break for loop
                         break
 
-                    if len(crafted_modifier_values) == 0:
+                    if len(crafted_modifier_values) != 0:
                         break
                     
             # Format variables
