@@ -108,7 +108,7 @@ def get_crafted_modifiers(username: str):
                     
                     # Guard clause
                     if f'CRAFTED_{position.upper()}' not in gear_modifier_config['modifierGroup'].keys():
-                        break
+                        continue
 
                     # Initiate variables
                     available_crafted_modifiers = gear_modifier_config['modifierGroup'].get(f'CRAFTED_{position.upper()}')
