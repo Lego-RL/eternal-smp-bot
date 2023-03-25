@@ -413,7 +413,7 @@ class Armory(commands.Cog):
             for crafted_modifier in player_crafted_modifiers[vault_gear]:
 
                 # Add modifier to field string (Soulbound)
-                if 'soulbound' in crafted_modifier['id']:
+                if 'Soulbound' in crafted_modifier['id']:
                     field_string += f'{crafted_modifier["id"]}'
                 
                 # Add modifier to field string (other)
