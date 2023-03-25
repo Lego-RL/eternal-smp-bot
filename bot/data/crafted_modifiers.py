@@ -129,8 +129,17 @@ def get_crafted_modifiers(username: str):
                             crafted_modifier_values.append(1)
                             break
 
-                        crafted_modifier_values.append(crafted_modifier_tier_data['value']['min'])
-                        crafted_modifier_values.append(crafted_modifier_tier_data['value']['max'])
+                        # Initiate variables
+                        crafted_modifier_value_min = crafted_modifier_tier_data['value']['min']
+                        crafted_modifier_value_max = crafted_modifier_tier_data['value']['max']
+
+                        # Format values
+                        if crafted_modifier_value_min % 1 != 0 or crafted_modifier_value_max % 1 != 0:
+                            crafted_modifier_value_min = f'{crafted_modifier_value_min * 100}%'
+                            crafted_modifier_value_max = f'{crafted_modifier_value_max * 100}%'
+
+                        crafted_modifier_values.append(crafted_modifier_value_min)
+                        crafted_modifier_values.append(crafted_modifier_value_max)
 
                         # Break for loop
                         break
@@ -162,8 +171,6 @@ def get_crafted_modifiers(username: str):
 
         # Format vault gear
         vault_gear = format.format_id(format.preformat_id(vault_gear))
-
-        print(vault_gear_crafted_modifiers)
 
         # Add vault gear piece to dictionary
         crafted_modifiers[vault_gear] = vault_gear_crafted_modifiers
