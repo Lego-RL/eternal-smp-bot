@@ -95,7 +95,7 @@ def get_crafted_modifiers(username: str):
             crafted_modifier_values = []
 
             # Read crafted modifiers config file
-            with open(os.path.join('config', 'the_vault', 'gear_modifiers', f'{vault_gear.lstrip("the_vault:")}.json'), 'r') as f:
+            with open(os.path.join('config', 'the_vault', 'gear_modifiers', f'{vault_gear.replace("the_vault:", "")}.json'), 'r') as f:
                 
                 # Retrieve config file data
                 gear_modifier_config: dict = json.load(f)
