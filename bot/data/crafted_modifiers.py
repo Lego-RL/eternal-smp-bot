@@ -135,8 +135,8 @@ def get_crafted_modifiers(username: str):
 
                         # Format values
                         if crafted_modifier_value_min % 1 != 0 or crafted_modifier_value_max % 1 != 0:
-                            crafted_modifier_value_min = f'{crafted_modifier_value_min * 100}%'
-                            crafted_modifier_value_max = f'{crafted_modifier_value_max * 100}%'
+                            crafted_modifier_value_min = f'{round(crafted_modifier_value_min * 100)}%'
+                            crafted_modifier_value_max = f'{round(crafted_modifier_value_max * 100)}%'
 
                         crafted_modifier_values.append(crafted_modifier_value_min)
                         crafted_modifier_values.append(crafted_modifier_value_max)

@@ -412,8 +412,13 @@ class Armory(commands.Cog):
             # Loop through vault gear crafted modifiers
             for crafted_modifier in player_crafted_modifiers[vault_gear]:
 
-                # Add modifier to field string
-                field_string += f'{crafted_modifier["id"]}: {crafted_modifier["values"][0]} - {crafted_modifier["values"][1]}'
+                # Add modifier to field string (Soulbound)
+                if 'soulbound' in crafted_modifier['id']:
+                    field_string += f'{crafted_modifier["id"]}'
+                
+                # Add modifier to field string (other)
+                else:
+                    field_string += f'{crafted_modifier["id"]}: {crafted_modifier["values"][0]} - {crafted_modifier["values"][1]}'
 
                 # Add empty line after every modifier
                 field_string += f'\n'
