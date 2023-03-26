@@ -13,6 +13,7 @@ from discord import ApplicationContext
 
 from discord.commands import slash_command, Option
 from discord.ext import commands, tasks
+from discord.interactions import Interaction
 
 import json
 import os
@@ -416,6 +417,7 @@ class Armory(commands.Cog):
                 if 'Soulbound' in crafted_modifier['id']:
                     field_string += f'{crafted_modifier["id"]}'
 
+                # Add modifier to field string (Single value)
                 elif crafted_modifier["values"][0] == crafted_modifier["values"][1]:
                     field_string += f'{crafted_modifier["id"]}: {crafted_modifier["values"][0]}'
                 
@@ -427,9 +429,10 @@ class Armory(commands.Cog):
                 field_string += f'\n'
             
             # Add field
-            embed.add_field(name=f'{vault_gear}', value=f"{field_string}", inline=False)
+            embed.add_field(name=f'{vault_gear}', value=f'{field_string}', inline=False)
 
-        await ctx.respond(embed=embed)
+        response = await ctx.respond(embed=embed)
+        await ctx.send(embed = embed)
 
 
 def setup(bot: discord.Bot) -> None:
