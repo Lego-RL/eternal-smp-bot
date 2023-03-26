@@ -431,8 +431,8 @@ class Armory(commands.Cog):
             # Add field
             embed.add_field(name=f'{vault_gear}', value=f'{field_string}', inline=False)
 
-        response = await ctx.respond(embed=embed)
-        await ctx.send(embed = embed)
+        await ctx.respond(embed=embed)
+        await ctx.defer()
 
 
 def setup(bot: discord.Bot) -> None:
