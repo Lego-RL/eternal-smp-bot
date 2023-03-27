@@ -4,7 +4,8 @@ import data.crafted_modifiers as crafted_modifiers
 from data.snapshots import get_player_snapshots
 from data.black_market import get_player_black_market_data
 from data.bounties import get_player_bounty_data
-from embeds import get_bounty_embed
+from data.proficiency import get_player_proficiency_data
+from embeds import get_bounty_embed, get_player_prof_embed
 from image import EmbedWithImage
 
 # Other imports
@@ -432,5 +433,37 @@ class Armory(commands.Cog):
         await ctx.respond(embed=embed)
 
 
+    @slash_command(name="proficiency")
+    async def proficiency(self,
+                       ctx: ApplicationContext,
+                       user: Option(discord.User, "Choose a user to retrieve crafted modifier stats for", required=False), #type: ignore
+                       mc_username: Option(str, "Choose a Minecraft username to retrieve crafted modifier stats for", required=False)): #type: ignore
+
+        """
+        Display the given player's gear crafting proficiency levels.
+        """
+
+        result_bool, result_str = choose_correct_ign(ctx, user, mc_username)
+
+        # if couldn't find ign
+        if not result_bool:
+            await ctx.respond(result_str)
+            return
+
+        ign: str = result_str
+
+        prof_data = get_player_proficiency_data(ign)
+        embed_obj: EmbedWithImage = get_player_prof_embed(f"{ign}'s Gear Proficiencies", ign, prof_data)
+
+        if embed_obj.image_file:
+            await ctx.respond(file=embed_obj.image_file, embed=embed_obj.embed)
+
+        else:
+            await ctx.respond(embed=embed_obj.embed)
+
+# if __name__ == "__main__":
+#     print(get_player_proficiency_data("Drlegoman"))
+
+# else:
 def setup(bot: discord.Bot) -> None:
     bot.add_cog(Armory(bot))

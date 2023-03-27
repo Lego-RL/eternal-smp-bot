@@ -1,8 +1,8 @@
 .env
 /env
-*/__pycache__
 *.ipynb
 local/
 /playerSnapshots
 bot/config.json
 /images
+__pycache__

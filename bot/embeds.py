@@ -11,11 +11,10 @@ class PlayerListOptions(Enum):
     ONLINE = 1
     IN_VAULT = 2
 
-
-def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> EmbedWithImage:
+def get_starter_embed(title: str, ign: str) -> tuple:
     """
-    Return an embed with given title and data on
-    bounties in given bounty list.
+    Returns a basic embed with its thumbnail set to a given
+    player's rendered head.
     """
 
     embed: discord.Embed = discord.Embed(title=title)
@@ -24,6 +23,17 @@ def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> EmbedWit
     head_render: Union[discord.File, None] = get_player_head_file_ign(ign)
     if head_render:
         embed.set_thumbnail(url="attachment://image.png")
+
+    return (embed, head_render)
+
+
+def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> EmbedWithImage:
+    """
+    Return an embed with given title and data on
+    bounties in given bounty list.
+    """
+
+    embed, head_render = get_starter_embed(title, ign)
 
     availability_set: set = set()
 
@@ -75,6 +85,29 @@ def get_bounty_embed(title: str, player_bounty_data: list, ign: str) -> EmbedWit
         if field_str:
             field_str = field_str[:-3]
         embed.add_field(name=f"{availability}".title(), value=field_str, inline=False)
+
+    embed_obj: EmbedWithImage = EmbedWithImage(embed, head_render)
+    return embed_obj
+
+
+def get_player_prof_embed(title: str, ign: str, prof_data) -> EmbedWithImage:
+    """
+    Return an embed with given title and data on
+    a player's proficiency numbers.
+    """
+
+    embed, head_render = get_starter_embed(title, ign)
+
+    desc_str: str = ""
+
+    ORDER: tuple = ("Helmet", "Chestplate", "Leggings", "Boots", "Magnet", "Sword", "Axe", "Shield", "Idol")
+    for prof_type in ORDER:
+
+        prof_value = prof_data.get(prof_type)
+        if prof_value:
+            desc_str += f"__{prof_type}__ - {prof_value}\n"
+
+    embed.description = desc_str
 
     embed_obj: EmbedWithImage = EmbedWithImage(embed, head_render)
     return embed_obj
