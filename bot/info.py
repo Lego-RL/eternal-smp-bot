@@ -2,7 +2,7 @@
 
 from armory import get_config_dict, write_to_config_file
 from data.snapshots import get_player_snapshots
-from embeds import PlayerListOptions, get_players_embed
+from embeds import PlayerListOptions, get_players_embed, get_help_embed
 
 
 # Other imports
@@ -153,6 +153,15 @@ class Info(commands.Cog):
         await ctx.respond(
             f"Successfully tied your discord account to Minecraft user `{ign}`!"
         )
+
+    @slash_command(name="help", description="See a list of available commands!")
+    async def help(self, ctx: ApplicationContext) -> None:
+        """
+        Send embed listing the bot's various commands.
+        """
+        
+        embed: discord.Embed = get_help_embed(ctx)
+        await ctx.respond(embed=embed, ephemeral=True)
 
 
 def setup(bot: discord.Bot) -> None:

@@ -135,7 +135,44 @@ def get_players_embed(list_option: PlayerListOptions, players: list) -> discord.
         embed.description = empty_description
     else:
         embed.description = "\n".join(players)
-    
 
     return embed
+
+
+def get_help_embed(ctx: discord.ApplicationContext) -> discord.Embed:
+    """
+    Generate help embed for help command.
+    """
+    embed: discord.Embed = discord.Embed(title="Bot Commands")
+    if (ctx.user.avatar):
+        if ctx.user.avatar.url:
+            embed.set_thumbnail(url=ctx.user.avatar.url)
+
+    embed.set_footer(text="Thank you for using Eternal bot! - Lego#0469")
+    embed.color = 0x7c1bd1
+
+    common_cmd_desc: str = """
+    `Online` - See list of players currently on minecraft server
+    """
+    embed.add_field(name="Common commands", value=common_cmd_desc, inline=False)
+
+    config_cmd_desc: str = """
+    `Alias` - Set your minecraft username alias for bot to use
+    `Bounty-alerts` - Choose to be alerted when you have new bounties
+    """
+    embed.add_field(name="Bot config commands", value=config_cmd_desc, inline=False)
+
+    info_cmd_desc: str = """
+    `Stats` - View player talents, abilities and researches
+    `Proficiency` - View player proficiency stats
+    `Crafted-modifiers` - View player's discovered craftable modifiers
+    `BM` - View player's current black market offerings
+    `Bounty` - View player's current bounty listings
+    """
+    embed.add_field(name="Vault info commands", value=info_cmd_desc, inline=False)
+
+
+    return embed
+    
+
 
