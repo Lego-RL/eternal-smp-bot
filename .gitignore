@@ -6,3 +6,4 @@ local/
 bot/config.json
 /images
 __pycache__
+.vscode/settings.json

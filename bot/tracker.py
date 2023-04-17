@@ -88,8 +88,6 @@ class Tracker(commands.Cog):
                 if not isinstance((vault_level := player_stats.get("vaultLevel")), int):
                     continue
 
-                print('and here too')
-
                 vault_level = str(vault_level)
                 user_nick: str = discord_user.display_name
                 pipe_loc: int = user_nick.find(" |")
@@ -106,7 +104,6 @@ class Tracker(commands.Cog):
                     to_truncate: int = total_user_len - 32
                     updated_username = user_nick[:-to_truncate] + f" | {vault_level}"
 
-                print('boop')
                 await discord_user.edit(nick=updated_username)
 
 
@@ -124,7 +121,6 @@ class Tracker(commands.Cog):
         configs: dict = get_config_dict()
 
         try:
-            #print(configs[ctx.user.id]) #type: ignore
             configs[str(ctx.user.id)]["track_level_nick"] = enabled #type: ignore
             write_to_config_file(configs)
 
