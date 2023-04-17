@@ -461,9 +461,6 @@ class Armory(commands.Cog):
         else:
             await ctx.respond(embed=embed_obj.embed)
 
-# if __name__ == "__main__":
-#     print(get_player_proficiency_data("Drlegoman"))
 
-# else:
 def setup(bot: discord.Bot) -> None:
     bot.add_cog(Armory(bot))

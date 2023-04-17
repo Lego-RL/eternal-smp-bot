@@ -27,7 +27,7 @@ async def on_ready():
 
 if __name__ == "__main__":
 
-    extensions = ['admin', 'armory', 'info']
+    extensions = ['admin', 'armory', 'info', 'tracker']
 
     for ext in extensions:
         bot.load_extension(ext)
