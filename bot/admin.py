@@ -14,6 +14,11 @@ class Admin(commands.Cog):
     @commands.is_owner()
     @slash_command(name="reload")
     async def reload(self, ctx: ApplicationContext, module: str):
+        """
+        Admin command to reload module while bot is still running.
+        Solely for quickly making changes while developing.
+        """
+    
         try:
             self.bot.unload_extension(module)
             self.bot.load_extension(module)

@@ -17,8 +17,6 @@ import json
 import requests
 
 
-
-
 def get_players_online() -> list:
     """
     Return a list of names of players currently
@@ -31,7 +29,6 @@ def get_players_online() -> list:
     response: dict = requests.get(API_LINK).json()
 
     # sometimes player list is in "info", sometimes in "players"
-
     if resp_info := response.get("info"):
         if "clean" in resp_info.keys():
             players = response["info"]["clean"]
@@ -44,25 +41,9 @@ def get_players_online() -> list:
         # no players online
         return []
 
-    players = [player[:-7] if "(vault)" in player else player for player in players]
+    players = [f"{player[:-7]} (In Vault)" if "(vault)" in player else player for player in players]
 
     return players
-
-
-def get_players_invault() -> list:
-    """
-    Return a list of names of players
-    currently in vault.
-    """
-
-    snapshots: list[dict] = get_player_snapshots()
-    players_in_vault: list[str] = []
-
-    for snapshot in snapshots:
-        if snapshot["inVault"]:
-            players_in_vault.append(snapshot["playerNickname"])
-
-    return players_in_vault
 
 
 class Info(commands.Cog):
@@ -115,18 +96,6 @@ class Info(commands.Cog):
 
         players_online: list = get_players_online()
         embed: discord.Embed = get_players_embed(PlayerListOptions.ONLINE, players_online)
-
-        await ctx.respond(embed=embed)
-
-
-    @slash_command(name="in-vault")
-    async def invault(self, ctx: ApplicationContext):
-        """
-        Respond with a list of players currently in a vault.
-        """
-
-        players_invault: list[str] = get_players_invault()
-        embed: discord.Embed = get_players_embed(PlayerListOptions.IN_VAULT, players_invault)
 
         await ctx.respond(embed=embed)
 
