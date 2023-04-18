@@ -123,6 +123,7 @@ def get_vault_stats_embed(title: str, ign: str, vault_stats: dict) -> EmbedWithI
 
     if vault_stats["total"] <= 0:
         field_desc: str = "This player has yet to run a vault!"
+        embed.add_field(name=field_desc)
 
     else:
         field_desc: str = f"""
@@ -130,8 +131,9 @@ def get_vault_stats_embed(title: str, ign: str, vault_stats: dict) -> EmbedWithI
         • {vault_stats['survived']} survived
         • {vault_stats['failed']} failed
         """
+        embed.add_field(name=f"{vault_stats['total']} Total Vaults", value=field_desc)
 
-    embed.add_field(name=f"{vault_stats['total']} Total Vaults", value=field_desc)
+    
 
     embed_obj: EmbedWithImage = EmbedWithImage(embed, head_render)
     return embed_obj
