@@ -5,7 +5,7 @@ from data.snapshots import get_player_snapshots
 from data.black_market import get_player_black_market_data
 from data.bounties import get_player_bounty_data
 from data.proficiency import get_player_proficiency_data
-from embeds import get_bounty_embed, get_player_prof_embed
+from embeds import get_bounty_embed, get_player_prof_embed, get_vault_stats_embed
 from image import EmbedWithImage
 
 # Other imports
@@ -31,17 +31,16 @@ def has_alias_set():
     return commands.check(predicate)
 
 
-def get_player_stats(ign: str) -> dict:
+def get_player_stats(ign: str, return_keys: list) -> dict:
     """
-    Return dictionary of player stats, given a player name.
+    Return dictionary of requested player stats, given a player name.
     """
 
     snapshots: list = get_player_snapshots()
-    to_preserve: list = ["vaultLevel", "powerLevel", "abilities", "talents", "researches"]
 
     for snapshot in snapshots:
         if snapshot["playerNickname"] == ign:
-            stats: dict = {key: snapshot[key] for key in snapshot if key in to_preserve}
+            stats: dict = {key: snapshot[key] for key in snapshot if key in return_keys}
             return stats
 
     return {}
@@ -274,7 +273,8 @@ class Armory(commands.Cog):
 
         ign: str = result_str
 
-        stats: dict = get_player_stats(ign)
+        to_retrieve: list = ["vaultLevel", "powerLevel", "abilities", "talents", "researches"]
+        stats: dict = get_player_stats(ign, to_retrieve)
 
         if not stats:
             await ctx.respond("Could not find a player with given Minecraft username!",)
@@ -314,6 +314,54 @@ class Armory(commands.Cog):
 
         await ctx.respond(embed=embed)
             
+
+    @slash_command(name="vault-stats")
+    async def vault_stats(self, 
+                          ctx: ApplicationContext, 
+                          user: Option(discord.User, "Choose a user to look up vault stats for", required=False), #type: ignore
+                          mc_username: Option(str, "Alternatively, supply a Minecraft username to get stats on", required=False)): #type: ignore
+        """
+        Respond with an embed of player vault stats on the requested player.
+        """
+
+        result_bool, result_str = choose_correct_ign(ctx, user, mc_username)
+
+        # if couldn't find ign
+        if not result_bool:
+            await ctx.respond(result_str)
+            return
+
+        ign: str = result_str
+
+        to_retrieve: list = ["completed", "survived", "failed", "vaultLevel"]
+        stats: dict = get_player_stats(ign, to_retrieve)
+
+        if not stats:
+            await ctx.respond("Could not find a player with given Minecraft username!",)
+            return
+        
+        vault_level: int = stats["vaultLevel"]
+
+        completed_vaults: int = stats["completed"]
+        survived_vaults: int = stats["survived"]
+        failed_vaults: int = stats["failed"]
+        total_vaults: int = completed_vaults + survived_vaults + failed_vaults
+
+        vault_stats: dict = {
+            "total": total_vaults,
+            "completed": completed_vaults,
+            "survived": survived_vaults,
+            "failed": failed_vaults
+        }
+
+        embed_obj: EmbedWithImage = get_vault_stats_embed(f"{ign} - Level {vault_level}", ign, vault_stats)
+
+        if embed_obj.image_file:
+            await ctx.respond(file=embed_obj.image_file, embed=embed_obj.embed)
+
+        else:
+            await ctx.respond(embed=embed_obj.embed)
+
 
     @slash_command(name="bm")
     async def black_market(self, 

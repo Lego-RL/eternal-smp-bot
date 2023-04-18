@@ -113,6 +113,26 @@ def get_player_prof_embed(title: str, ign: str, prof_data) -> EmbedWithImage:
     return embed_obj
 
 
+def get_vault_stats_embed(title: str, ign: str, vault_stats: dict) -> EmbedWithImage:
+    """
+    Return an embed with vault stats for given player
+    """
+    
+    embed, head_render = get_starter_embed(title, ign)
+    embed.color = 0x7c1bd1
+
+    field_desc: str = f"""
+    • {vault_stats['completed']} completed
+    • {vault_stats['survived']} survived
+    • {vault_stats['failed']} failed
+    """
+
+    embed.add_field(name=f"{vault_stats['total']} Total Vaults", value=field_desc)
+
+    embed_obj: EmbedWithImage = EmbedWithImage(embed, head_render)
+    return embed_obj
+
+
 def get_players_embed(list_option: PlayerListOptions, players: list) -> discord.Embed:
     """
     Returns an embed that lists all players
@@ -164,6 +184,7 @@ def get_help_embed(ctx: discord.ApplicationContext) -> discord.Embed:
 
     info_cmd_desc: str = """
     `Stats` - View player talents, abilities and researches
+    `Vault-stats` - See player level and info on number of vaults ran
     `Proficiency` - View player proficiency stats
     `Crafted-modifiers` - View player's discovered craftable modifiers
     `BM` - View player's current black market offerings
