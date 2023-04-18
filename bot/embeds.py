@@ -121,11 +121,15 @@ def get_vault_stats_embed(title: str, ign: str, vault_stats: dict) -> EmbedWithI
     embed, head_render = get_starter_embed(title, ign)
     embed.color = 0x7c1bd1
 
-    field_desc: str = f"""
-    • {vault_stats['completed']} completed
-    • {vault_stats['survived']} survived
-    • {vault_stats['failed']} failed
-    """
+    if vault_stats["total"] <= 0:
+        field_desc: str = "This player has yet to run a vault!"
+
+    else:
+        field_desc: str = f"""
+        • {vault_stats['completed']} completed
+        • {vault_stats['survived']} survived
+        • {vault_stats['failed']} failed
+        """
 
     embed.add_field(name=f"{vault_stats['total']} Total Vaults", value=field_desc)
 
