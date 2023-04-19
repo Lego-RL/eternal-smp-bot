@@ -16,6 +16,7 @@ from discord.ext import commands, tasks
 import json
 import requests
 
+from main import SERVER_IP
 
 def get_players_online() -> list:
     """
@@ -23,7 +24,10 @@ def get_players_online() -> list:
     online.
     """
 
-    API_LINK: str = "https://api.mcsrvstat.us/2/150.136.42.152"
+    if not SERVER_IP:
+        return []
+
+    API_LINK: str = f"https://api.mcsrvstat.us/2/{SERVER_IP}"
     players: list = []
 
     response: dict = requests.get(API_LINK).json()

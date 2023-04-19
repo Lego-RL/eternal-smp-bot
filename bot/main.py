@@ -6,6 +6,7 @@ import os
 load_dotenv()
 
 TESTING = os.getenv("TESTING")
+SERVER_IP = os.getenv("SERVER_IP")
 
 if TESTING == "TRUE" or TESTING == True:
     TOKEN = os.getenv("TEST_TOKEN")

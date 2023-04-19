@@ -185,6 +185,7 @@ def get_help_embed(ctx: discord.ApplicationContext) -> discord.Embed:
     config_cmd_desc: str = """
     `Alias` - Set your minecraft username alias for bot to use
     `Bounty-alerts` - Choose to be alerted when you have new bounties
+    `Enable-nick-level` - Makes bot keep your vault level updated in your nickname
     """
     embed.add_field(name="Bot config commands", value=config_cmd_desc, inline=False)
 
