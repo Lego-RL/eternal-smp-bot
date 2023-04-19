@@ -28,13 +28,13 @@ To use this bot, you'll need to [create your own discord bot](https://discordpy.
 
 It will also require `Python 3.9` or greater, alongside the Python package manager `pip` to be installed on the server.
 
-1. In the terminal, navigate into your Vault Hunters server folder. Clone the bot repository files by running `git clone https://github.com/Lego-RL/eternal-smp-bot.git eternal-bot`. This will put the bot files in a new folder called `eternal-bot`. 
+1. In the terminal, navigate into your Vault Hunters server folder. Clone the bot repository files by running `git clone https://github.com/Lego-RL/eternal-smp-bot.git`. This will put the bot files in a new folder called `eternal-smp-bot`. 
 
-2. Install necessary Python libraries by navigating to the bot folder via `cd eternal-bot`, and run the command `python3 -m pip install -r requirements.txt`. 
+2. Install necessary Python libraries by navigating to the bot folder via `cd eternal-smp-bot`, and run the command `python3 -m pip install -r requirements.txt`. 
 
-3. While still in the `eternal-bot` directory, open the `.env` file in a text editor. Right after `BOT_TOKEN=`, paste the bot token from the Discord bot you generated previously. Optionally, paste your server's IP after `SERVER_IP=` - supplying this solely allows the `/online` command to function to see how many players are online via the website `https://api.mcsrvstat.us`. The IP is not accessed elsewhere.
+3. While still in the `eternal-smp-bot` directory, open the `.env` file in a text editor. Right after `BOT_TOKEN=`, paste the bot token from the Discord bot you generated previously. Optionally, paste your server's IP after `SERVER_IP=` - supplying this solely allows the `/online` command to function to see how many players are online via the website `https://api.mcsrvstat.us`. The IP is not accessed elsewhere.
 
-4. Finally, run the bot! Navigate back to your server folder (with `cd ..` if still in `eternal-bot`) and run `python3 eternal-bot/bot/main.py`. You should see a message that the bot has connected to Discord if all goes well.
+4. Finally, run the bot! Navigate back to your server folder (with `cd ..` if still in `eternal-smp-bot`) and run `python3 eternal-smp-bot/bot/main.py`. You should see a message that the bot has connected to Discord if all goes well.
 
 5. Over time, the bot may get updated with new features or fix commands that break due to changes with new Vault Hunters updates. To retrieve the most recent version of the bot, you may navigate to the bot folder and run `git pull` to pull new changes. Updates will be announced in the Eternal VH Bot Discord linked below.
 

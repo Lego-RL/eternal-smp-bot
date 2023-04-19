@@ -70,7 +70,7 @@ class Info(commands.Cog):
         if self.eternal_guild:
             self.num_online_vc = self.eternal_guild.get_channel(self.num_online_vc_id)
 
-        self.update_num_online.start()
+            self.update_num_online.start()
 
     def cog_unload(self):
         self.update_num_online.cancel()

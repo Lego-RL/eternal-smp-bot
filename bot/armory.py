@@ -52,7 +52,7 @@ def get_config_dict() -> dict:
     """
 
     if platform != "win32":
-        if TESTING == False:
+        if TESTING == False or TESTING == "FALSE":
             path: str = os.path.join("eternal-smp-bot", "bot", "config.json")
         else:
             path: str = os.path.join("test-eternal-smp-bot", "bot", "config.json")
