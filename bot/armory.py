@@ -147,9 +147,11 @@ class Armory(commands.Cog):
 
         # Eternal SMP guild ID
         self.bounty_alert_guild = self.bot.get_guild(1064745467663102043) #type: ignore
-        self.bounty_alert_channel = self.bounty_alert_guild.get_channel(1070115776637444197) #type: ignore
 
-        self.bounty_alerts_task.start()
+        if self.bounty_alert_guild:
+            self.bounty_alert_channel = self.bounty_alert_guild.get_channel(1070115776637444197) #type: ignore
+
+            self.bounty_alerts_task.start()
 
     def cog_unload(self):
         self.bounty_alerts_task.cancel()
